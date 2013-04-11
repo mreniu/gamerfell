@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
   <head>
+    <meta charset=utf-8 />
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
@@ -8,8 +9,45 @@
     <script src="/javascripts/bootstrap.js"></script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    kiy
+    <div id="header">
+      <div id="title">GAMERFELL</div>
+    </div>
+
+    <div id="loginPanel">
+      <div id="userInfo"><h2>[:)] Xavi Sendra (peticions/notificacions)</h2></div>
+      <div id="login">
+        <form method="post" action="#">
+          <label>User:</label>
+          <input type="text" id="username"/>
+          <label>Pssw:</label>
+          <input type="password" id="password"/>
+          <button class="boto">Login</button>
+          <button class="boto">Signup</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="appBody">
+      <div id ="gamesPanel">
+        <div id="gamesTitle" class="title">Jocs</div>
+        <div id="gamesList">llista jocs...</div>
+      </div>
+      <div id ="friendsPanel">
+        <div id="friendsTitle" class="title">Amics</div>
+        <div id="friendsList">llista amics...</div>
+      </div>
+      <div id ="boardPanel">
+        <div id="boardTitle" class="title"><p id="GameNameLabel">Jugant a:TIC-TAC-TOE</p></div>
+        <div id="boardContent">
+          CONTINGUT!
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      Marc Reniu i Xavier Sendra super fukers! Copyright &copy; ADA All rights reserved.
+    </div>
+
   </body>
 </html>
+
