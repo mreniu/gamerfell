@@ -1,15 +1,71 @@
-html{
+html {
     height: 100%;
 }
 
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #62AC61;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: #62AC61;
     height: 100%;
 }
 
 a {
   color: #00B7FF;
+}
+
+button.btn {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    margin: 0 5px;
+    background: -moz-linear-gradient(
+        top,
+        #19f0ff 0%,
+        #198cff);
+    background: -webkit-gradient(
+        linear, left top, left bottom,
+        from(#19f0ff),
+        to(#198cff));
+    background-image: linear-gradient(
+        to bottom,
+        #19f0ff,
+        #198cff
+    );
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    border: 1px solid #1971ff;
+    -moz-box-shadow:
+        0px 1px 3px rgba(000,000,000,0.5),
+        inset 0px 0px 2px rgba(255,255,255,0.7);
+    -webkit-box-shadow:
+        0px 1px 3px rgba(000,000,000,0.5),
+        inset 0px 0px 2px rgba(255,255,255,0.7);
+    box-shadow:
+        0px 1px 3px rgba(000,000,000,0.5),
+        inset 0px 0px 2px rgba(255,255,255,0.7);
+    text-shadow:
+        0px -1px 0px rgba(000,000,000,0.4),
+        0px 1px 0px rgba(255,255,255,0.3);
+}
+div.panel{
+    background: #198cff;
+    width: 60%;
+    margin: 0 auto;
+    padding: 5px;
+    border-radius: 15px;
+    border: 1px solid #5555ff;
+    -moz-box-shadow:
+        0px 1px 3px rgba(000,000,000,0.5),
+        inset 0px 0px 2px rgba(255,255,255,0.7);
+    -webkit-box-shadow:
+        0px 1px 3px rgba(000,000,000,0.5),
+        inset 0px 0px 2px rgba(255,255,255,0.7);
+    box-shadow:
+        0px 1px 3px rgba(000,000,000,0.5),
+        inset 0px 0px 2px rgba(255,255,255,0.7);
+    text-shadow:
+        0px -1px 0px rgba(000,000,000,0.4),
+        0px 1px 0px rgba(255,255,255,0.3);
 }
 /**************
     HEADER
@@ -18,41 +74,39 @@ a {
 #header
 {
     height: 10%;
-    background:green;
-    text-align:center;
-    vertical-align: middle;
-}
-
-/*************
-    LOGIN
-*************/
-#loginPanel
-{
-    /*float:left;*/
     width: 100%;
-    height: 10%;
-    background:red;
-}
-#userInfo
-{
-    float:left;
-    width: 50%;
-    height: 100%;
-    background:blue;
-}
-#login
-{
-    float:right;
-    width: 50%;
-    height:100%;
-    vertical-align:middle;
-    text-align:right;
-    background:yellow;
-}
-#loginPanel #login input{
-    width: 150px;
 }
 
+#logo {
+    float: left;
+    padding: 15px 20px;
+}
+
+#user-panel {
+    float: right;
+    text-align: right;
+    border-radius: 10px;
+    margin: 15px 10px 15px 0;
+    padding: 5px 10px;
+    background: #DDD;
+}
+#user-panel #login {
+
+}
+#user-panel #login .field {
+    float: left;
+    padding: 0 5px;
+}
+#user-panel #login .submit {
+    clear: both;
+    padding: 5px 0;
+}
+#user-panel #login input{
+    width: 120px;
+}
+#user-panel #login label {
+    font-weight: bold;
+}
 /***************
     APPBODY
 ***************/
@@ -60,29 +114,60 @@ a {
 #appBody
 {
     width: 100%;
-    height:75%;
-    background:black;
+    height:70%;
+    clear: both;
 }
-#appBody #gamesPanel
+#appBody .title
+{
+    height: 5%;
+    text-align: center;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 15px;
+}
+#appBody .content
+{
+    padding: 20px 20px 0;
+    height: 90%;
+    background: #DDD;
+    border-radius: 30px;
+}
+
+#gamesPanel
 {
     float:left;
     width: 20%;
     height:100%;
-    background:brown;
 }
-#appBody #contentPanel
+#gamesPanel #gamesList {
+    margin: 10px 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#boardPanel
 {
-    float:left;
+    margin: 0 auto;
     width: 60%;
     height:100%;
-    background:purple;
+    position: relative;
 }
-#appBody #friendsPanel
+#boardPanel #boardContent{
+    margin: 10px;
+    border-radius: 30px;
+}
+
+#friendsPanel
 {
     float:right;
     width: 20%;
     height:100%;
-    background:grey;
+}
+#friendsPanel #friendsList {
+    margin: 10px 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 /*****************
@@ -93,6 +178,15 @@ a {
     position: absolute;
     bottom: 0;
     width:100%;
-    height: 5%;
-    background:orange;
+    height: 50px;
+}
+#footer #content
+{
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+    background: #DDD;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }

@@ -7,45 +7,67 @@
     <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
     <script src="/javascripts/jquery-1.9.1.js"></script>
     <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/application.js"></script>
   </head>
   <body>
     <div id="header">
-      <div id="title">GAMERFELL</div>
-    </div>
 
-    <div id="loginPanel">
-      <div id="userInfo"><h2>[:)] Xavi Sendra (peticions/notificacions)</h2></div>
-      <div id="login">
-        <form method="post" action="#">
-          <label>User:</label>
-          <input type="text" id="username"/>
-          <label>Pssw:</label>
-          <input type="password" id="password"/>
-          <button class="boto">Login</button>
-          <button class="boto">Signup</button>
-        </form>
+      <div id="logo">
+        <h1 id="title">GAMERFELL</h1>
       </div>
+
+      <div id="user-panel">
+
+        <div id="login">
+          <form method="post" action="#">
+            <div class="field">
+              <label>Usuari:</label>
+              <input type="text" id="username"/>
+            </div>
+            <div class="field">
+              <label>Contrasenya:</label>
+              <input type="password" id="password"/>
+            </div>
+            <div class="submit">
+              <button id="botoLogin" class="btn">Login</button>
+              <button id="botoSignup" class="btn">Signup</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+
     </div>
 
     <div id="appBody">
       <div id ="gamesPanel">
-        <div id="gamesTitle" class="title">Jocs</div>
-        <div id="gamesList">llista jocs...</div>
+        <div id="gamesTitle" class="title">
+          <div class="panel">Jocs</div>
+        </div>
+        <div id="gamesList" class="content">llista jocs...</div>
       </div>
       <div id ="friendsPanel">
-        <div id="friendsTitle" class="title">Amics</div>
-        <div id="friendsList">llista amics...</div>
+        <div id="friendsTitle" class="title">
+          <div class="panel">Amics</div>
+        </div>
+        <div id="friendsList" class="content">llista amics...</div>
       </div>
       <div id ="boardPanel">
-        <div id="boardTitle" class="title"><p id="GameNameLabel">Jugant a:TIC-TAC-TOE</p></div>
-        <div id="boardContent">
+        <div id="boardTitle" class="title">
+          <div class="panel">Jugant a:TIC-TAC-TOE</div>
+        </div>
+        <div id="boardContent" class="content">
           CONTINGUT!
         </div>
       </div>
     </div>
 
     <div id="footer">
-      Marc Reniu i Xavier Sendra super fukers! Copyright &copy; ADA All rights reserved.
+      <div id="content">
+        <span style="position: relative; top: 10px;">
+          Marc Reniu i Xavier Sendra Copyright 2013 &copy; ADA All rights reserved.
+        </span>
+      </div>
     </div>
 
   </body>
