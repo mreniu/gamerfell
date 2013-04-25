@@ -133,42 +133,100 @@ div.panel{
     background: #DDD;
     border-radius: 30px;
 }
+    /************************
+              GAMES
+    ************************/
+    #gamesPanel
+    {
+        float:left;
+        width: 20%;
+        height:100%;
+    }
+    #gamesList {
+        margin: 10px 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    #gamesList .game {
+        margin: 0 auto;
+        vertical-align: middle;
+        display: block;
+        padding: 3px;
+        width: 95%;
+        height: 30px;
+        background-color: #fdc;
+        border-radius: 3px 3px 3px 3px;
+        border-bottom: 1px solid #777;
+    }
+    #gamesList .game img, #friendsList .friend img {
+        width: 25px;
+        height: 95%;
+    }
 
-#gamesPanel
-{
-    float:left;
-    width: 20%;
-    height:100%;
-}
-#gamesPanel #gamesList {
-    margin: 10px 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
+    /************************
+              BOARD
+    ************************/
+    #boardPanel
+    {
+        margin: 0 auto;
+        width: 60%;
+        height:100%;
+        position: relative;
+    }
+    #boardContent{
+        margin: 10px;
+        border-radius: 30px;
+    }
+    #gameContent{
+        float:left;
+        width: 25%;
+        height: 95%;
+        background-color: #cdf;
+    }
+    #jugadorContent{
+        float:right;
+        width: 25%;
+        height: 95%;
+        background-color: #cdf;
+    }
 
-#boardPanel
-{
-    margin: 0 auto;
-    width: 60%;
-    height:100%;
-    position: relative;
-}
-#boardPanel #boardContent{
-    margin: 10px;
-    border-radius: 30px;
-}
+    /************************
+             FRIENDS
+    ************************/
+    #friendsPanel
+    {
+        float:right;
+        width: 20%;
+        height:100%;
+    }
+    #friendsList {
+        margin: 10px 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
 
-#friendsPanel
-{
-    float:right;
-    width: 20%;
-    height:100%;
-}
-#friendsPanel #friendsList {
-    margin: 10px 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
+    #friendsList .friend {
+        margin: 0 auto;
+        vertical-align: middle;
+        display: block;
+        padding: 3px;
+        width: 95%;
+        height: 30px;
+        background-color: #cdf;
+        border-radius: 3px 3px 3px 3px;
+        border-bottom: 1px solid #777;
+    }
+    #friendsList .friend.ui-state-selected{
+        margin: 0 auto;
+        vertical-align: middle;
+        display: block;
+        padding: 3px;
+        width: 95%;
+        height: 30px;
+        background-color: #cdf;
+        border-radius: 3px 3px 3px 3px;
+        border-bottom: 2px solid #777;
+    }
 
 /*****************
     FOOTER
