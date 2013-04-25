@@ -142,25 +142,42 @@ div.panel{
         width: 20%;
         height:100%;
     }
-    #gamesList {
+    #gamesPanel #gamesList {
         margin: 10px 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
+        overflow: auto;
+        direction: rtl;
     }
     #gamesList .game {
-        margin: 0 auto;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-box;
+        display: -o-box;
+        direction: ltr;
+        margin: 5px auto;
         vertical-align: middle;
-        display: block;
         padding: 3px;
         width: 95%;
-        height: 30px;
-        background-color: #fdc;
+        background-color: #cdf;
         border-radius: 3px 3px 3px 3px;
-        border-bottom: 1px solid #777;
+        box-shadow: 1px 1px 5px #888;
+    }
+    #gamesList .game .text {
+        margin: 0 5px;
+        width: 73%;
+    }
+    #gamesList .game .text .title {
+        margin: 0;
+        text-align: left;
+    }
+    #gamesList .game .text .desc {
+        margin: 0;
+        font-style: italic;
+        color: #777;
     }
     #gamesList .game img, #friendsList .friend img {
-        width: 25px;
-        height: 95%;
+        width: 50px;
     }
 
     /************************
@@ -199,25 +216,40 @@ div.panel{
         width: 20%;
         height:100%;
     }
-    #friendsList {
+    #friendsPanel #friendsList {
         margin: 10px 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        overflow: auto;
     }
 
     #friendsList .friend {
-        margin: 0 auto;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-box;
+        display: -o-box;
+        margin: 5px auto;
         vertical-align: middle;
-        display: block;
         padding: 3px;
-        width: 95%;
-        height: 30px;
         background-color: #cdf;
         border-radius: 3px 3px 3px 3px;
-        border-bottom: 1px solid #777;
+        box-shadow: 1px 1px 5px #888 ;
+    }
+    #friendsList .friend .text {
+        margin: 0 5px;
+        width: 73%;
+    }
+    #friendsList .friend .text .title {
+        margin: 0;
+        text-align: left;
+    }
+    #friendsList .friend .text .desc {
+        margin: 0;
+        font-style: italic;
+        color: #777;
     }
     #friendsList .friend.ui-state-selected{
-        margin: 0 auto;
+        margin: 5px auto;
         vertical-align: middle;
         display: block;
         padding: 3px;
@@ -247,4 +279,5 @@ div.panel{
     background: #DDD;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    font-weight: bolder;
 }
