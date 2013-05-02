@@ -3243,7 +3243,9 @@ button.close {
 }
 
 .btn:hover,
-.btn:focus {
+.btn:focus,
+input.btn:hover,
+input.btn:focus {
   color: #333333;
   text-decoration: none;
   /*background-position: 0 -15px;*/

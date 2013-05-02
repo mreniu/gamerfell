@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset=utf-8 />
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='/stylesheets/bootstrap.css' />
+  <script src="/javascripts/jquery-1.9.1.js"></script>
+  <script src="/javascripts/jquery-ui-1.10.2.custom.js"></script>
+  <script src="/javascripts/bootstrap.js"></script>
+  <script src="/javascripts/application.js"></script>
+  <script src="/javascripts/signup.js"></script>
+  <script src="/javascripts/jquery.validate.js"></script>
+  <script src="/javascripts/additional-methods.js"></script>
+</head>
+<body>
+<div id="header">
+
+  <div id="logo">
+    <a href="/">
+      <h1 id="title">GAMERFELL</h1>
+    </a>
+  </div>
+
+  <div id="user-panel">
+    <div id="login">
+      <div class="field">
+        <label>Usuari:</label>
+        <input type="text" id="login_username"/>
+      </div>
+      <div class="field">
+        <label>Contrasenya:</label>
+        <input type="password" id="login_password"/>
+      </div>
+      <div class="submit">
+        <button id="botoLogin" class="btn">Login</button>
+        <a id="botoSignup" class="btn" href="./signup">Signup</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="appBody">
+  <div id="boardPanel">
+    <div id="boardTitle" class="title" >
+      <div class="panel">Registre</div>
+    </div>
+
+    <div id="boardContent" class="content" >
+      <div id="signupForm">
+        <form class="form-horizontal" id="registerHere" method='post' action=''>
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label">Usuari</label>
+              <div class="controls">
+                <input type="text" class="input-xlarge" id="user" name="user" rel="popover" data-content="Entra nom d'usuari.">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Nom</label>
+              <div class="controls">
+                <input type="text" class="input-xlarge" id="name" name="name" rel="popover" data-content="Entra nom">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Cognoms</label>
+              <div class="controls">
+                <input type="text" class="input-xlarge" id="surnames" name="surnames" rel="popover" data-content="Entra cognom">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Correu electrònic</label>
+              <div class="controls">
+                <input type="email" class="input-xlarge" id="email" name="email" rel="popover" data-content="Entra correu electrònic">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Contrasenya</label>
+              <div class="controls">
+                <input type="password" class="input-xlarge" id="password" name="password" rel="popover" data-content="Entra contrasenya">
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Confirma contrasenya</label>
+              <div class="controls">
+                <input type="password" class="input-xlarge" id="password_confirm" name="password_confirm" rel="popover" data-content="Entra confirmació de contrasenya">
+              </div>
+            </div>
+
+
+            <div class="control-group">
+              <label class="control-label"></label>
+              <div class="controls">
+                <button type="submit" class="btn" >Crear usuari</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="footer">
+  <div id="content">
+        <span style="position: relative; top: 10px;">
+          Marc Reniu i Xavier Sendra Copyright 2013 &copy; ADA All rights reserved.
+        </span>
+  </div>
+</div>
+
+</body>
+</html>
