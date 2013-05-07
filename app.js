@@ -32,7 +32,23 @@ app.get('/users', user.list);
 app.get('/signup', routes.signup);
 
 var server = http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+    console.log('Express server listening on port ' + app.get('port'));
+    //#######PROVES SOCKET#########
+    var io = require('socket.io').listen(server);
 
-var io = require('socket.io').listen(server);
+    //Iniciamos la conexión.
+    io.sockets.on('connection', function(socket){
+        console.log('Connecton recived');
+        //Emitimos nuestro evento connected
+        socket.emit('connected');
+
+        //Permanecemos a la escucha del evento click
+        socket.on('missatge', function(data){
+            console.log('Missatge rebut:'+data);
+            //Emitimos el evento que dirá al cliente que hemos recibido el click
+            //y el número de clicks que llevamos
+            socket.emit('missatgeRem', 'Hola '+data+'!');
+        });
+    });
+    //############################
+});
