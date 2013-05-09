@@ -1,12 +1,12 @@
 $(document).ready(function()
 {
-// Popover 
+    // Popover
     $('#registerHere input').hover(
         function(){ $(this).popover('show'); },
         function(){ $(this).popover('hide'); }
     );
 
-// Validation
+    // Validation of inputs
 
     $("#registerHere").validate({
         rules:{
@@ -28,7 +28,6 @@ $(document).ready(function()
                 required:"Entra confirmació de contrasenya",
                 equalTo:"La contrasenya i la seva confirmació han de coincidir"}
         },
-
         errorClass: "help-inline",
         errorElement: "span",
         highlight:function(element, errorClass, validClass)
@@ -41,10 +40,33 @@ $(document).ready(function()
             $(element).parents('.control-group').addClass('success');
         }
     });
-
 /*
-    $("#registerHere").validate({
-        debug: true
-    });
-    */s
+    $('#registerHere').submit(function() {
+        var ruser= $('#registerHere #user').val();
+        var rname= $('#registerHere #name').val();
+        var rsurnames= $('#registerHere #surnames').val();
+        var remail= $('#registerHere #email').val();
+        var rpassword= $('#registerHere #password').val();
+
+        var u= {
+            user: ruser,
+            name: rname,
+            surnames: rsurnames,
+            email: remail,
+            password: rpassword
+        };
+
+        addUser(u);
+    });*/
 });
+
+function addUser(user) {
+    $.ajax({
+       url: '/users',
+        method: 'post',
+
+        success: function(data) {
+
+        }
+    });
+}

@@ -11,6 +11,14 @@ var express = require('express')
 
 var app = express();
 
+var mongo = require('mongodb');
+var Server = mongo.Server,
+    Db = mongo.Db,
+    BSON = mongo.BSONPure;
+var server = new Server('localhost', 27017, {auto_reconnect: true});
+db = new Db('gamerfell', server);
+user.populateDB();
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -28,8 +36,14 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 app.get('/signup', routes.signup);
+
+app.get('/users', user.findAll);
+app.get('/users/:id', user.findById);
+app.post('/users', user.addUser);
+app.put('/users/:id', user.updateUser);
+app.delete('/users/:id', user.deleteUser);
+
 
 var server = http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
