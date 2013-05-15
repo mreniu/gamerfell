@@ -40,33 +40,4 @@ $(document).ready(function()
             $(element).parents('.control-group').addClass('success');
         }
     });
-/*
-    $('#registerHere').submit(function() {
-        var ruser= $('#registerHere #user').val();
-        var rname= $('#registerHere #name').val();
-        var rsurnames= $('#registerHere #surnames').val();
-        var remail= $('#registerHere #email').val();
-        var rpassword= $('#registerHere #password').val();
-
-        var u= {
-            user: ruser,
-            name: rname,
-            surnames: rsurnames,
-            email: remail,
-            password: rpassword
-        };
-
-        addUser(u);
-    });*/
 });
-
-function addUser(user) {
-    $.ajax({
-       url: '/users',
-        method: 'post',
-
-        success: function(data) {
-
-        }
-    });
-}

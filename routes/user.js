@@ -43,7 +43,7 @@ exports.addUser = function(req, res) {
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                res.render('index', { title: 'GamerFell' });
             }
         });
     });
@@ -92,6 +92,9 @@ exports.deleteUser = function(req, res) {
 /*             INITIALIZING DATABASE                 */
 /*---------------------------------------------------*/
 exports.populateDB = function() {
+    db.collection('users', function(err, collection) {
+        collection.remove();
+    });
 
     var users = [
         {
