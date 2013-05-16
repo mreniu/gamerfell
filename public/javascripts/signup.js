@@ -38,6 +38,24 @@ $(document).ready(function()
         {
             $(element).parents('.control-group').removeClass('error');
             $(element).parents('.control-group').addClass('success');
+        },
+        submitHandler: function() {
+            console.log('Submiting user');
+            $.ajax({
+                type: 'POST',
+                url: '/users',
+                data: $('#registerHere').serialize()
+            }).done(function(data){
+                if (data.error == undefined) {
+                    console.log('SUCCES: ' + data);
+                    window.location.href= "/";
+                } else {
+                    alert('ERROR: '+ data.error);
+                    console.log('ERROR: '+ data.error);
+
+                }
+            });
         }
     });
 });
+

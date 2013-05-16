@@ -27,7 +27,7 @@ exports.findAll = function(req, res) {
 };
 
 exports.addUser = function(req, res) {
-
+    console.log('Data: '+ req.body )
     var u= {
         user: req.body.user,
         name: req.body.name,
@@ -35,15 +35,29 @@ exports.addUser = function(req, res) {
         email: req.body.email,
         password: req.body.password
     };
-
-    console.log('Adding user: ' + JSON.stringify(u));
     db.collection('users', function(err, collection) {
-        collection.insert(u, {safe:true}, function(err, result) {
-            if (err) {
-                res.send({'error':'An error has occurred'});
+        collection.findOne({$or: [{user: req.body.user},{email: req.body.email}]}, function(err, result) {
+            if (result != null) {
+                console.log('ERROR: User already exist');
+                if (result.email == req.body.email) {
+                    res.send({'error':"Ja existeix un usuari amb aquest email"});
+                } else {
+                    res.send({'error':"Ja existeix un usuari amb el mateix nom d'usuari"});
+                }
+
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
-                res.render('index', { title: 'GamerFell' });
+                console.log('Adding user: ' + JSON.stringify(u));
+                db.collection('users', function(err, collection) {
+                    collection.insert(u, {safe:true}, function(err, result) {
+                        if (err) {
+                            res.send({'error':'An error has occurred'});
+                        } else {
+                            console.log('Success: ' + JSON.stringify(result[0]));
+                            req.session.id_user = result[0]._id;
+                            res.send(result[0]);
+                        }
+                    });
+                });
             }
         });
     });
