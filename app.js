@@ -6,6 +6,8 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
+  , game = require('./routes/game')
+  , friendship = require('./routes/friendship')
   , http = require('http')
   , path = require('path');
 
@@ -24,6 +26,8 @@ db.open(function(err, db) {
             if (err) {
                 console.log("The 'gamerfell' collection doesn't exist. Creating it with sample data...");
                 user.populateDB();
+                game.populateDB();
+                friendship.populateDB();
             }
         });
     }
@@ -51,6 +55,11 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/signup', routes.signup);
+
+app.post('/games', game.findById);
+app.get('/games', game.findAll);
+
+app.get('/friendships', friendship.findAll);
 
 app.get('/users', user.findAll);
 app.get('/users/:id', user.findById);
@@ -82,29 +91,36 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             console.log('Presentacio rebuda:'+idUser);
             usersConn.push(idUser);
             sockets.push(socket);
+            socket.emit('connected');
         });
         socket.on('peticioJugar',function(peticio){
-            console.log('Peticio rebuda:'+data);
+            console.log('Peticio rebuda:'+peticio);
             var peticioObj=JSON.parse(peticio);
             //Comprovar que son amics
-            if(existFriendship(peticioObj.myId,peticioObj.hisId))
-            {
-               var index=usersConn.indexOf(peticioObj.hisId);
-               socket2=sockets[index];
-               socket2.emit('peticioJugar',peticio);
-                console.log('Peticio reenviada a:'+peticioObj.hisId);
-            }else
-            {
-                console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
-                socket.emit('ERROR','No es pot enviar peticio de jugar a '+peticioObj.hisId);
-            }
+            existFriendship(peticioObj.myId,peticioObj.hisId,function(result){
+                if(result>0)
+                {
+                    var index=usersConn.indexOf(peticioObj.hisId);
+                    socket2=sockets[index];
+                    socket2.emit('peticioJugar',peticio);
+                    console.log('Peticio reenviada a:'+peticioObj.hisId);
+                }else
+                {
+                    console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
+                    socket.emit('ERROR','No es pot enviar peticio de jugar a '+peticioObj.hisId);
+                }
+            }) ;
+
         });
     });
     //############################
 });
-
-
-function existFriendship(idUser1,idUser2)
+function existFriendship(idUser1,idUser2,callback)
 {
-    return db.friendship.find({UserID:idUser1,UserID2:idUser2}).count()===1;
+    db.collection('friendships', function(err, collection) {
+        collection.find({USERID:idUser1,USERID2:idUser2}).count(function(err, count) {
+            console.log('existeix:count?:'+count);
+            callback(count);
+        });
+    });
 }
