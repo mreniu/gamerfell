@@ -95,6 +95,9 @@ exports.populateDB = function() {
     db.collection('users', function(err, collection) {
         collection.remove();
     });
+    db.collection('game', function(err, collection) {
+        collection.remove();
+    });
 
     var users = [
         {
@@ -111,9 +114,21 @@ exports.populateDB = function() {
             email: "el@rubius.com",
             password: "asdasdasd"
         }];
+    var games = [
+        {
+            GAMEID: "01",
+            NAME: "Pedra-Paper-Tisores",
+            DESCRIPTION: "Pedra, paper, tisores de tota la vida...",
+            NPlayers: "2",
+            GAMEPATH: "games/pedrapapertisores/pedrapapertisores.js"
+        }];
+
 
     db.collection('users', function(err, collection) {
         collection.insert(users, {safe:true}, function(err, result) {});
+    });
+    db.collection('games', function(err, collection) {
+        collection.insert(games, {safe:true}, function(err, result) {});
     });
 
 };

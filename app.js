@@ -17,7 +17,19 @@ var Server = mongo.Server,
     BSON = mongo.BSONPure;
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('gamerfell', server);
-user.populateDB();
+db.open(function(err, db) {
+    if(!err) {
+        console.log("Connected to 'gamerfell' database");
+        db.collection('gamerfell', {strict:true}, function(err, collection) {
+            if (err) {
+                console.log("The 'gamerfell' collection doesn't exist. Creating it with sample data...");
+                user.populateDB();
+            }
+        });
+    }
+});
+
+
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -44,7 +56,8 @@ app.post('/users', user.addUser);
 app.put('/users/:id', user.updateUser);
 app.delete('/users/:id', user.deleteUser);
 
-
+var usersConn=[];  //llista usuaris connectats
+var sockets=[];   //llista de sockets de cada usuari
 var server = http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
     //#######PROVES SOCKET#########
@@ -54,7 +67,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
     io.sockets.on('connection', function(socket){
         console.log('Connecton recived');
         //Emitimos nuestro evento connected
-        socket.emit('connected');
+        socket.emit('WhoAreYou');
 
         //Permanecemos a la escucha del evento click
         socket.on('missatge', function(data){
@@ -63,6 +76,33 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             //y el número de clicks que llevamos
             socket.emit('missatgeRem', 'Hola '+data+'!');
         });
+        socket.on('IAm',function(idUser){
+            console.log('Presentacio rebuda:'+idUser);
+            usersConn.push(idUser);
+            sockets.push(socket);
+        });
+        socket.on('peticioJugar',function(peticio){
+            console.log('Peticio rebuda:'+data);
+            var peticioObj=JSON.parse(peticio);
+            //Comprovar que son amics
+            if(existFriendship(peticioObj.myId,peticioObj.hisId))
+            {
+               var index=usersConn.indexOf(peticioObj.hisId);
+               socket2=sockets[index];
+               socket2.emit('peticioJugar',peticio);
+                console.log('Peticio reenviada a:'+peticioObj.hisId);
+            }else
+            {
+                console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
+                socket.emit('ERROR','No es pot enviar peticio de jugar a '+peticioObj.hisId);
+            }
+        });
     });
     //############################
 });
+
+
+function existFriendship(idUser1,idUser2)
+{
+    return db.friendship.find({UserID:idUser1,UserID2:idUser2}).count()===1;
+}
