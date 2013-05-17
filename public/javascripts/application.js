@@ -85,3 +85,22 @@ function connect() {
     });
 }
 //###########################
+
+/******    LOGIN      ******/
+
+$('#loginHere').submit(function(){
+    console.log('Login user');
+    $.ajax({
+        type: 'POST',
+        url: '/users/login',
+        data: $('#loginHere').serialize()
+    }).done(function(data){
+            if (data.error == undefined) {
+                console.log('SUCCES: ' + data);
+                window.location.href= "/";
+            } else {
+                alert(data.error);
+                console.log('ERROR: '+ data.error);
+            }
+        });
+});

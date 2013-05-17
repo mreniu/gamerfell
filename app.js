@@ -45,6 +45,7 @@ app.get('/users/:id', user.findById);
 app.post('/users', user.addUser);
 app.put('/users/:id', user.updateUser);
 app.delete('/users/:id', user.deleteUser);
+app.post('/users/login', user.loginUser);
 
 
 var server = http.createServer(app).listen(app.get('port'), function(){

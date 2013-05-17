@@ -102,6 +102,32 @@ exports.deleteUser = function(req, res) {
     });
 }
 
+exports.loginUser = function(req, res) {
+    db.collection('users', function(err, collection) {
+        collection.findOne([{'user': req.body.user},{'password': req.body.password}], function(err, item) {
+            if (item == undefined) {
+                req.send('error',"Usuari i/o password no són correctes");
+            } else {
+                req.session.id_user = item._id;
+                req.send('success', 'Loguejat')
+            }
+        });
+    });
+}
+
+exports.getLogin = function(req, res) {
+    var id = req.session.id_user;
+
+    if (id == null) {
+        res.send({'error': "No hi ha sessio"});
+    } else {
+        db.collection('users', function(err, collection) {
+            collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+                res.send(item);
+            });
+        });
+    }
+}
 /*---------------------------------------------------*/
 /*             INITIALIZING DATABASE                 */
 /*---------------------------------------------------*/

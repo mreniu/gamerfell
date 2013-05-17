@@ -50,9 +50,8 @@ $(document).ready(function()
                     console.log('SUCCES: ' + data);
                     window.location.href= "/";
                 } else {
-                    alert('ERROR: '+ data.error);
+                    alert(data.error);
                     console.log('ERROR: '+ data.error);
-
                 }
             });
         }

@@ -23,18 +23,20 @@
 
       <div id="user-panel">
         <div id="login">
-          <div class="field">
-            <label>Usuari:</label>
-            <input type="text" id="username"/>
-          </div>
-          <div class="field">
-            <label>Contrasenya:</label>
-            <input type="password" id="password"/>
-          </div>
-          <div class="submit">
-            <button id="botoLogin" class="btn">Login</button>
-            <a id="botoSignup" class="btn" href="/signup">Signup</a>
-          </div>
+          <form id="loginHere">
+            <div class="field">
+              <label>Usuari:</label>
+              <input type="text" id="username" name="user"/>
+            </div>
+            <div class="field">
+              <label>Contrasenya:</label>
+              <input type="password" id="password" name="password"/>
+            </div>
+            <div class="submit">
+              <button id="botoLogin" type="submit" class="btn">Login</button>
+              <a id="botoSignup" class="btn" href="/signup">Signup</a>
+            </div>
+          </form>
         </div>
       </div>
 
