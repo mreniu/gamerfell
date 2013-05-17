@@ -154,6 +154,7 @@ $(document).ready(function(){
                     console.log('SUCCES: ' + data.success);
                     $.cookie('id_user', data.id);
                     alert('SUCCES: '+data.success);
+                    uploadUser(data.id);
                 } else {
                     alert('ERROR: '+data.error);
                     console.log('ERROR: '+ data.error);
@@ -162,3 +163,13 @@ $(document).ready(function(){
     });
 });
 
+function uploadUser(userID){
+    console.log('getlogin');
+    $.ajax({
+        type: 'POST',
+        url: '/users/getLogin',
+        data: {'id': userID}
+    }).done(function(data){
+        alert('Doned: change login form for user');
+    });
+}
