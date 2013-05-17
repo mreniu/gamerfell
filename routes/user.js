@@ -135,7 +135,6 @@ exports.populateDB = function() {
     db.collection('users', function(err, collection) {
         collection.remove();
     });
-
     var users = [
         {
             user: "LamarLamiouen",
@@ -155,5 +154,4 @@ exports.populateDB = function() {
     db.collection('users', function(err, collection) {
         collection.insert(users, {safe:true}, function(err, result) {});
     });
-
 };
