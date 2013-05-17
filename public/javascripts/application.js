@@ -142,19 +142,23 @@ function connect(callback) {
 
 /******    LOGIN      ******/
 
-$('#loginHere').submit(function(){
-    console.log('Login user');
-    $.ajax({
-        type: 'POST',
-        url: '/users/login',
-        data: $('#loginHere').serialize()
-    }).done(function(data){
-            if (data.error == undefined) {
-                console.log('SUCCES: ' + data);
-                window.location.href= "/";
-            } else {
-                alert(data.error);
-                console.log('ERROR: '+ data.error);
-            }
-        });
+$(document).ready(function(){
+    $('#botoLogin').click(function(){
+        console.log('Login user');
+        $.ajax({
+            type: 'POST',
+            url: '/users/login',
+            data: $('#loginHere').serialize()
+        }).done(function(data){
+                if (data.error === undefined) {
+                    console.log('SUCCES: ' + data.success);
+                    $.cookie('id_user', data.id);
+                    alert('SUCCES: '+data.success);
+                } else {
+                    alert('ERROR: '+data.error);
+                    console.log('ERROR: '+ data.error);
+                }
+            });
+    });
 });
+

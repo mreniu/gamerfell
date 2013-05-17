@@ -104,19 +104,22 @@ exports.deleteUser = function(req, res) {
 
 exports.loginUser = function(req, res) {
     db.collection('users', function(err, collection) {
-        collection.findOne([{'user': req.body.user},{'password': req.body.password}], function(err, item) {
+        collection.findOne({'user': req.body.user,'password': req.body.password}, function(err, item) {
+            console.log('ITEM: '+ item);
             if (item == undefined) {
-                req.send('error',"Usuari i/o password no són correctes");
+                console.log('ERROR')
+                res.send({"error": "Usuari i/o password no són correctes"});
             } else {
+                console.log('SUCCESS')
                 req.session.id_user = item._id;
-                req.send('success', 'Loguejat')
+                res.send({'success': 'Loguejat','id':item._id})
             }
         });
     });
 }
 
 exports.getLogin = function(req, res) {
-    var id = req.session.id_user;
+    var id = req.body.id;
 
     if (id == null) {
         res.send({'error': "No hi ha sessio"});
@@ -149,6 +152,20 @@ exports.populateDB = function() {
             surnames: "Of Kitchen",
             email: "el@rubius.com",
             password: "asdasdasd"
+        },
+        {
+            user: "asd",
+            name: "Soup",
+            surnames: "Of Kitchen",
+            email: "asd@asd.com",
+            password: "asdasd"
+        },
+        {
+            user: "qwe",
+            name: "Soup",
+            surnames: "Of Kitchen",
+            email: "qwe@qwe.com",
+            password: "qweqwe"
         }];
 
     db.collection('users', function(err, collection) {
