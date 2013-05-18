@@ -113,6 +113,25 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             }) ;
 
         });
+        socket.on('acceptarJugar',function(acceptar){
+            console.log('Acceptar peticio rebuta:'+acceptar);
+            var peticioObj=JSON.parse(acceptar);
+            //Comprovar que son amics
+            existFriendship(peticioObj.myId,peticioObj.hisId,function(result){
+                if(result>0)
+                {
+                    var index=usersConn.indexOf(peticioObj.hisId);
+                    socket2=sockets[index];
+                    socket2.emit('acceptarJugar',acceptar);
+                    console.log('Acceptar reenviat a:'+peticioObj.hisId);
+                }else
+                {
+                    console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
+                    socket.emit('ERROR','No es pot enviar peticio de jugar a '+peticioObj.hisId);
+                }
+            }) ;
+
+        });
     });
     //############################
 });

@@ -1,0 +1,59 @@
+div .gameHeader
+{
+    height: 10%;
+    width: 95%;
+    margin: 0 auto;
+    background: red;
+}
+div .gameContent
+{
+    postion: relative;
+    height: 90%;
+    width: 95%;
+    background: blue;
+}
+div.gameContent .pptPeces
+{
+    height:20%;
+    background: green;
+    padding: 10px 10px 10px;
+    border-radius: 10px;
+}
+div.gameContent #pptPecesJo
+{
+    margin-bottom: 10px;
+}
+div .pptDesti
+{
+    position:relative;
+    height:100px;
+    width:95%;
+    background: purple;
+}
+div #appContent
+{
+    position:relative;
+}
+#pptPecesJo img
+{
+    height: 100px;
+    width: 100px;
+    border: 1px solid;
+}
+#pptPecesEnemic img
+{
+    height: 80px;
+    width: 80px;
+    border: 1px solid;
+}
+#pptDestiJo.hoverDrop
+{
+    background: #AAA!important;
+}
+
+#pptDestiJo img
+{
+    margin: 0 auto;
+    height: 100px;
+    width: 100px;
+}
