@@ -60,24 +60,50 @@ $(function() {
     var imgHelp="<img class='imgJoc' src = '/javascripts/games/pedrapapertisores/how-to-play-rock-paper-scissors-spock.jpg' alt = 'HOW TO' />";
     $('#boardContent').append(div);
     socket.on('Jugada',function(jugada){
+        var jugada1=JSON.parse(jugada);
        if(jugadaMeva != undefined)
        {
+           var imgEnem=$('<img/>',{id:"imgEnemic", fitxa:jugada1.jugada, class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/"+jugada1.jugada+".png", alt: jugada1.jugada});
+           $('#pptDestiEnemic').empty();
+           $('#pptDestiEnemic').append(imgEnem);
            var resultat=$('<div/>',{id:'resultatPPT'});
-           if(heGuanyat(jugadaMeva,jugada.fitxa))
+           var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
+           botoTancar.append("Tancar joc");
+           botoTancar.click(function()
+           {
+               $('#resultatPPT').remove() ;
+               $('#boardContent').empty();
+           });
+           var botoTornar=$('<a/>',{id:"botoTornarPPT",class:"btn"});
+           botoTornar.append("Tornar a jugar");
+           botoTornar.click(function()
+           {
+               $('#resultatPPT').remove();
+               $('#boardContent').empty();
+               socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
+           });
+           if(heGuanyat(jugadaMeva,jugada1.fitxa))
            {
                var img1=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
                resultat.append(img1);
-               var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
-               botoTancar.append("Tancar joc");
-               botoTancar.click(function()
-               {
-                   $('#resultatPPT').remove() ;
-                   $('#boardContent').empty();
-               });
-
-               resultat.append("");
-
+               resultat.append(botoTancar);
+               resultat.append(botoTornar);
+          }else
+           {
+               var img1=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
+               resultat.append(img1);
+               resultat.append(botoTancar);
+               resultat.append(botoTornar);
            }
+           jugadaEnemic=undefined;
+           jugadaMeva=undefined;
+           $(document.body).append(resultat);
+       }else
+       {
+           jugadaEnemic=jugada1.jugada;
+           var imgEnem=$('<img/>',{id:"imgEnemic", fitxa:'interrogant', class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/interrogant.png", alt: 'interrogant'});
+           $('#pptDestiEnemic').empty();
+           $('#pptDestiEnemic').append(imgEnem);
        }
     });
 });
@@ -85,44 +111,64 @@ function handle_drop_patient(event, ui) {
     $(ui.draggable).addClass("ui-state-selected");
     $('#pptDestiJo').empty();
     $('#pptDestiJo').append(ui.draggable.clone());
-    socket.emit("Jugada",'{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+',jugada:'+ui.draggable.attr('fitxa')+'}');
-    /*
-    if(jocSel != '' && jugadorSel !='')
+    jugadaMeva=ui.draggable.attr('fitxa');
+    socket.emit("Jugada",'{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'","jugada":"'+ui.draggable.attr('fitxa')+'"}');
+    if(jugadaEnemic != undefined)
     {
-        alert("Enviar petició?");
-        if(socket==='')
+        var imgEnem=$('<img/>',{id:"imgEnemic", fitxa:jugadaEnemic, class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/"+jugadaEnemic+".png", alt: jugadaEnemic});
+        $('#pptDestiEnemic').empty();
+        $('#pptDestiEnemic').append(imgEnem);
+        var resultat=$('<div/>',{id:'resultatPPT'});
+        var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
+        botoTancar.append("Tancar joc");
+        botoTancar.click(function()
         {
-            connect(function(userId1,userId2,jocId){
-                socket.emit('peticioJugar','{"myId":"'+userId1+'","hisId":"'+userId2+'","jocId":"'+jocId+'"}');
-            });
-
-
-        }
-        else
+            $('#resultatPPT').remove() ;
+            $('#boardContent').empty();
+        });
+        var botoTornar=$('<a/>',{id:"botoTornarPPT",class:"btn"});
+        botoTornar.append("Tornar a jugar");
+        botoTornar.click(function()
         {
-            socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+userId2+'","jocId":"'+jocId+'"}');
-            alert("NO FALTA CONNECTAR?");
+            $('#resultatPPT').remove();
+            $('#boardContent').empty();
+            $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR){});
+        });
+        if(heGuanyat(jugadaMeva,jugadaEnemic))
+        {
+            var img1=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
+            resultat.append(img1);
+            resultat.append(botoTancar);
+            resultat.append(botoTornar);
+        }else
+        {
+            var img1=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
+            resultat.append(img1);
+            resultat.append(botoTancar);
+            resultat.append(botoTornar);
         }
-    }*/
+        $(document.body).append(resultat);
+    }
 }
-
-/*
- function loadScript(url, callback)
- {
- // adding the script tag to the head as suggested before
- var head = document.getElementsByTagName('head')[0];
- var script = document.createElement('script');
- script.type = 'text/javascript';
- script.src = url;
-
- // then bind the event to the callback function
- // there are several events for cross browser compatibility
- script.onreadystatechange = callback;
- script.onload = callback;
-
- // fire the loading
- head.appendChild(script);
- }//http://stackoverflow.com/questions/950087/how-to-include-a-javascript-file-in-another-javascript-file
-
-
- */
+function heGuanyat(meva,seva)
+{
+    console.log("MEVA:"+meva+" SEVA:"+seva);
+    if(meva==='scissors' && seva==='paper'
+        || meva==='spock' && seva==='scissors'
+        || meva==='lizard' && seva==='spock'
+        || meva==='rock' && seva==='lizard'
+        || meva==='paper' && seva==='rock'
+        || meva==='paper' && seva==='spock'
+        || meva==='lizard' && seva==='paper'
+        || meva==='rock' && seva==='scissors'
+        || meva==='scissors' && seva==='lizard'
+        || meva==='spock' && seva==='rock')
+    {
+        console.log("HE GUANYAT");
+        return true;
+    }
+    else
+    {
+        console.log("HE PERDUT");
+    }    return false;
+}

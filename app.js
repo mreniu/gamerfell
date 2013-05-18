@@ -92,9 +92,27 @@ var server = http.createServer(app).listen(app.get('port'), function(){
         });
         socket.on('IAm',function(idUser){
             console.log('Presentacio rebuda:'+idUser);
+            var index=usersConn.indexOf(idUser);
+            if(index>=0)
+            {
+                usersConn.splice(index, 1);
+                var sock=sockets[index];
+                sock.close();
+                sockets.splice(index, 1);
+            }
             usersConn.push(idUser);
             sockets.push(socket);
+
             socket.emit('connected');
+        });
+        socket.on('disconnect', function () {
+            console.log('Desconectado!');
+            var index=sockets.indexOf(socket);
+            if(index>=0)
+            {
+                sockets.splice(index, 1);
+                usersConn.splice(index, 1);
+            }
         });
         socket.on('peticioJugar',function(peticio){
             console.log('Peticio rebuda:'+peticio);
@@ -132,7 +150,25 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                     socket.emit('ERROR','No es pot enviar peticio de jugar a '+peticioObj.hisId);
                 }
             }) ;
+        });
 
+        socket.on('Jugada',function(jugada){
+            console.log('Jugada rebuta:'+jugada);
+            var jugadaObj=JSON.parse(jugada);
+            //Comprovar que son amics
+            existFriendship(jugadaObj.myId,jugadaObj.hisId,function(result){
+                if(result>0)
+                {
+                    var index=usersConn.indexOf(jugadaObj.hisId);
+                    socket2=sockets[index];
+                    socket2.emit('Jugada',jugada);
+                    console.log('Jugada reenviat a:'+jugadaObj.hisId);
+                }else
+                {
+                    console.log('ERROR: no es pot reevnar la jugada:'+jugadaObj.hisId);
+                    socket.emit('ERROR','No es pot enviar jugada a '+jugadaObj.hisId);
+                }
+            }) ;
         });
     });
     //############################
