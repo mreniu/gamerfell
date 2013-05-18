@@ -48,6 +48,7 @@ $(document).ready(function()
             }).done(function(data){
                 if (data.error == undefined) {
                     console.log('SUCCES: ' + data);
+                    $.cookie('id_user', data.id)
                     window.location.href= "/";
                 } else {
                     alert(data.error);

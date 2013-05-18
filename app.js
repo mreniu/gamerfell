@@ -14,9 +14,10 @@ var express = require('express')
 var app = express();
 
 var mongo = require('mongodb');
+var ObjectID = require('mongodb').ObjectID;
 var Server = mongo.Server,
-    Db = mongo.Db,
-    BSON = mongo.BSONPure;
+    Db = mongo.Db
+var BSON = mongo.BSONPure;
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('gamerfell', server);
 db.open(function(err, db) {
@@ -67,6 +68,7 @@ app.post('/users', user.addUser);
 app.put('/users/:id', user.updateUser);
 app.delete('/users/:id', user.deleteUser);
 app.post('/users/login', user.loginUser);
+app.post('/users/getLogin', user.getLogin);
 
 var usersConn=[];  //llista usuaris connectats
 var sockets=[];   //llista de sockets de cada usuari
