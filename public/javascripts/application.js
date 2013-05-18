@@ -1,12 +1,15 @@
 $(function() {
+    if($.cookie('id_user')!=undefined)
+        connect();
     var var1=0;
     var var2=0;
     socket='';
     jocSel= '';
     jugadorSel='';
+    nomJocSel='';
     $("#botoProva1").click(function () {
-        var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>friend"+var1+"</div><div class='desc'>desc desc</div></div>"
-        var div=$('<div/>',{id:'friend'+var1,class:'friend ui-widget-content draggable'}).append( string )
+        var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>user"+var1+"</div><div class='desc'>desc desc</div></div>"
+        var div=$('<div/>',{id:'user'+var1,class:'friend ui-widget-content draggable'}).append( string )
         div.draggable(
         {
             revert:'invalid',
@@ -15,9 +18,6 @@ $(function() {
         });
         $("#friendsList").append(div);
         var1=var1+1;
-        $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
-        {
-        });
     });
 
 
@@ -78,57 +78,51 @@ function handle_drop_patient(event, ui) {
 
  //####PROVES SOCKET######
 function connect(callback) {
-    alert("Connecting...");
     socket = io.connect('http://localhost');
     socket.on('WhoAreYou',function () {
-        alert('WhoAreYou Rebut!');
         socket.emit('IAm',$.cookie('id_user'));
     });
     //#3 Si estamos conectados, muestra el log y cambia el mensaje
     socket.on('connected', function () {
         console.log('Conectado!');
-        alert('Connectat!');
-        callback($.cookie('id_user'),jugadorSel,jocSel);
+        if(callback!=undefined)
+            callback($.cookie('id_user'),jugadorSel,jocSel);
     });
     //#5 El servidor nos responde al click con este evento y nos da el número de clicks en el callback.
     socket.on('missatgeRem', function(missatge){
         console.log('Missatge: '+missatge);
-        alert('MISSATGE REBUT:'+missatge);
     });
     socket.on('peticioJugar',function(peticio){
         console.log('Peticio rebuda: '+peticio);
         //demanar a usuari si vol jugar
-        alert("Peticio rebuda sdgsdfsdf");
         var peticioObj=JSON.parse(peticio);
-        alert("Peticio rebuda aaaaaa");
         var nomJoc='';
         $.ajax({
             type: 'POST',
             url: '/games',
             data: 'gameid='+peticioObj.jocId
         }).done(function(data){
-                alert("Data Loaded bb: " + data);
             if (data.error == undefined) {
                 console.log('SUCCES: ' + data);
                 nomJoc=data.NAME;
-                alert("Data Loaded: " + data);
-                var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId, class:'game ui-widget-content draggable'})
+                var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
                 var string= "<a href='#'><strong>"+peticioObj.myId+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
                 li.append(string);
                 li.click(function()
                 {
-                    alert("JUGAR A:"+$(this).attr('joc'));
-                    var str="Peticions de jugar("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                    jocSel=$(this).attr('joc');
+                    jugadorSel=$(this).attr('user');
+                    var str="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
                     $('#botoPeticions').empty();
                     $('#botoPeticions').append(str);
                     $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
                     {
-                        socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+$(this).attr('user')+'","jocId":"'+$(this).attr('joc')+'"}');
+                        socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
                         li.remove();
                     });
                 });
                 $('#llistaPeticions').append(li);
-                var string2="Peticions de jugar("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                var string2="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
                 $('#botoPeticions').empty();
                 $('#botoPeticions').append(string2);
             } else {
@@ -137,6 +131,15 @@ function connect(callback) {
             }
         });
     });
+    socket.on('acceptarJugar',function(data)
+    {
+        var accept=JSON.parse(data);
+        jugadorSel=accept.myId;
+        jocSel=accept.jocId;
+        $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
+        {});
+    });
+    //socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+$(this).attr('user')+'","jocId":"'+$(this).attr('joc')+'"}');
     //#6 Si nos desconectamos, muestra el log y cambia el mensaje.
     socket.on('disconnect', function () {
         console.log('Desconectado!');
@@ -155,20 +158,21 @@ $(document).ready(function(){
             url: '/users/login',
             data: $('#loginHere').serialize()
         }).done(function(data){
-                if (data.error === undefined) {
-                    console.log('SUCCES: ' + data.success);
-                    $.cookie('id_user', data.id);
-                    //alert('SUCCES: '+data.success);
-                    if (window.location.pathname.match(/signup/) != undefined) {
-                        window.location.href = "/";
-                    } else {
-                        uploadUser(data.id);
-                    }
+            if (data.error === undefined) {
+                console.log('SUCCES: ' + data.success);
+                $.cookie('id_user', data.id);
+                //alert('SUCCES: '+data.success);
+                if (window.location.pathname.match(/signup/) != undefined) {
+                    window.location.href = "/";
                 } else {
-                    alert('ERROR: '+data.error);
-                    console.log('ERROR: '+ data.error);
+                    uploadUser(data.id);
                 }
-            });
+                connect();
+            } else {
+                alert('ERROR: '+data.error);
+                console.log('ERROR: '+ data.error);
+            }
+        });
     });
 
     $('#botoLogout').click(function(){

@@ -24,8 +24,11 @@ exports.populateDB = function() {
     });
     var friendships = [
         {
-            USERID: "xavi",
-            USERID2: "friend1"
+            USERID: "user3",
+            USERID2: "user4"
+        },{
+            USERID: "user4",
+            USERID2: "user3"
         }];
 
 
