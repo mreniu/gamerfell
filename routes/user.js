@@ -58,7 +58,7 @@ exports.addUser = function(req, res) {
                             } else {
                                 console.log('Success: ' + JSON.stringify(result[0]));
                                 req.session.id_user = result[0].USERID;
-                                res.send(result[0]);
+                                res.send({'id': result[0].USERID});
                             }
                         });
                     });
@@ -108,6 +108,7 @@ exports.deleteUser = function(req, res) {
 }
 
 exports.loginUser = function(req, res) {
+    console.log("USER: "+req.body.user+" PASS: "+req.body.password)
     db.collection('users', function(err, collection) {
         collection.findOne({'user': req.body.user,'password': req.body.password}, function(err, item) {
             console.log('ITEM: '+ item);
@@ -130,7 +131,7 @@ exports.getLogin = function(req, res) {
         res.send({'error': "No hi ha sessio"});
     } else {
         db.collection('users', function(err, collection) {
-            collection.findOne({'_id': id}, function(err, item) {
+            collection.findOne({'USERID': id}, function(err, item) {
                 if (err) {
                     res.send({'error': "Error a get login - " + err})
                 } else {

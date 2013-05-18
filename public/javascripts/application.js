@@ -153,16 +153,32 @@ $(document).ready(function(){
                 if (data.error === undefined) {
                     console.log('SUCCES: ' + data.success);
                     $.cookie('id_user', data.id);
-                    alert('SUCCES: '+data.success);
-                    uploadUser(data.id);
+                    //alert('SUCCES: '+data.success);
+                    if (window.location.pathname.match(/signup/) != undefined) {
+                        window.location.href = "/";
+                    } else {
+                        uploadUser(data.id);
+                    }
                 } else {
                     alert('ERROR: '+data.error);
                     console.log('ERROR: '+ data.error);
                 }
             });
     });
-});
 
+    $('#botoLogout').click(function(){
+        $.cookie('id_user', null, {expires: -1});
+        window.location.href = "/";
+    });
+});
+$(function(){
+    if ($.cookie('id_user') != undefined){
+        uploadUser($.cookie('id_user'));
+        $('#user').css('display','');
+    } else {
+        $('#login').css('display','');
+    }
+});
 function uploadUser(userID){
     console.log('getlogin');
     $.ajax({
@@ -170,6 +186,9 @@ function uploadUser(userID){
         url: '/users/getLogin',
         data: {'id': userID}
     }).done(function(data){
-        alert('Doned: change login form for user');
+        //alert('Doned: change login form for user\r\n'+data);
+        $('#user-panel .user-name').html(data.user);
+        $('#login').css('display','none');
+        $('#user').css('display','');
     });
 }
