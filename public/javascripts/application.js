@@ -15,7 +15,9 @@ $(function() {
         });
         $("#friendsList").append(div);
         var1=var1+1;
-
+        $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
+        {
+        });
     });
 
 
@@ -59,20 +61,16 @@ function handle_drop_patient(event, ui) {
     $(ui.draggable).remove();
     if(jocSel != '' && jugadorSel !='')
     {
-        myId=$('#username').val();
         alert("Enviar petició?");
         if(socket==='')
         {
-            alert("CONNECTAT???¿¿");
             connect(function(userId1,userId2,jocId){
                 socket.emit('peticioJugar','{"myId":"'+userId1+'","hisId":"'+userId2+'","jocId":"'+jocId+'"}');
             });
-
-
-        }
+       }
         else
         {
-            socket.emit('peticioJugar','{"myId":"'+userId1+'","hisId":"'+userId2+'","jocId":"'+jocId+'"}');
+            socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
             alert("NO FALTA CONNECTAR?");
         }
     }
@@ -84,13 +82,13 @@ function connect(callback) {
     socket = io.connect('http://localhost');
     socket.on('WhoAreYou',function () {
         alert('WhoAreYou Rebut!');
-        socket.emit('IAm',myId);
+        socket.emit('IAm',$.cookie('id_user'));
     });
     //#3 Si estamos conectados, muestra el log y cambia el mensaje
     socket.on('connected', function () {
         console.log('Conectado!');
         alert('Connectat!');
-        callback(myId,jugadorSel,jocSel);
+        callback($.cookie('id_user'),jugadorSel,jocSel);
     });
     //#5 El servidor nos responde al click con este evento y nos da el número de clicks en el callback.
     socket.on('missatgeRem', function(missatge){
@@ -120,9 +118,16 @@ function connect(callback) {
                 li.click(function()
                 {
                     alert("JUGAR A:"+$(this).attr('joc'));
-                    initPPP();
+                    var str="Peticions de jugar("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                    $('#botoPeticions').empty();
+                    $('#botoPeticions').append(str);
+                    $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
+                    {
+                        socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+$(this).attr('user')+'","jocId":"'+$(this).attr('joc')+'"}');
+                        li.remove();
+                    });
                 });
-                $('#llistaPeticions').append(li)
+                $('#llistaPeticions').append(li);
                 var string2="Peticions de jugar("+ $('#llistaPeticions').length+")<span class='caret'></span>";
                 $('#botoPeticions').empty();
                 $('#botoPeticions').append(string2);
