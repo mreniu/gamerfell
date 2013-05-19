@@ -142,29 +142,35 @@ function handle_drop_patient(event, ui) {
     }
 }
 
- //####PROVES SOCKET######
+ //PROGRAMACIO DEL SOCKET CLIENT
+//AQUEST METODE QUE NEGOCIA LA CONNEXIO AMB EL SERVIDOR PER CREAR EL SOCKET
+//I PROGRAMA LES ACCIONS DEL SOCKET PER CADA MISSATGE REBUT
 function connect(callback) {
     socket = io.connect('http://localhost');
     socket.on('WhoAreYou',function () {
         socket.emit('IAm',$.cookie('id_user'));
     });
-    //#3 Si estamos conectados, muestra el log y cambia el mensaje
+    //ENVIAR PETICIO
     socket.on('connected', function () {
         console.log('Conectado!');
         if(callback!=undefined)
             callback($.cookie('id_user'),jugadorSel,jocSel);
     });
-    //#5 El servidor nos responde al click con este evento y nos da el número de clicks en el callback.
+    //MISSATGE REBUT DEL SERVIDOR SERIA PER FER EL XAT
     socket.on('missatgeRem', function(missatge){
         console.log('Missatge: '+missatge);
     });
+
+    //REBEM PETICIO DE JUGAR, s'afegeix a la llista de peticions  i a la cookie
     socket.on('peticioJugar',function(peticio){
         console.log('Peticio rebuda: '+peticio);
         //demanar a usuari si vol jugar
         var peticioObj=JSON.parse(peticio);
         var nomJoc='';
-        getNomByUserId(peticioObj.myId,function(nomJugador){
 
+        //PER OBTENIR EL NOM DEL JUGADOR
+        getNomByUserId(peticioObj.myId,function(nomJugador){
+            //PER OBTENIR EL NOM DEL JOC
             $.ajax({
                 type: 'POST',
                 url: '/games',
@@ -187,19 +193,22 @@ function connect(callback) {
                     var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
                     var string= "<a href='#'><strong>"+nomJugador+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
                     li.append(string);
+                    //QUAN ES FA CLIC A LA PETICIO S?ENVIA MISSATGE DE ACCEPTAR PETICIO I S=INCIIA EL JOC
                     li.click(function()
                     {
                         jocSel=$(this).attr('joc');
                         jugadorSel=$(this).attr('user');
+                        //EXECUTAR SCRIPT DEL JOC
                         $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
                         {
+                            //ACCEPTAR PETICIO
                             socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
                             li.remove();
                             var peticions;
                             if($.cookie("peticions")!=undefined)
                             {
                                 peticions=JSON.parse($.cookie("peticions"));
-
+                                //ELIMINAR DE LA LLISTA DE PETICIONS A LA COOKIE
                                 var index=findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie('id_user')+'","jocId":"'+jocSel+'"}'),function(){
                                     if(peticions !=undefined)
                                     {
@@ -230,11 +239,13 @@ function connect(callback) {
             });
         });
     });
+    //REBEM UN ACCEPTAR I Sinicia el joc
     socket.on('acceptarJugar',function(data)
     {
         var accept=JSON.parse(data);
         jugadorSel=accept.myId;
         jocSel=accept.jocId;
+        //GUARDA A LA DB LA PARTIDA I ELS JUGADORS
         crearPartida($.cookie('id_user'),jugadorSel,jocSel);
         $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
         {});
@@ -400,6 +411,7 @@ function addFriendToListWithSearch(friend){
             $(div).after(chat_div);
     });
 }
+//OBTENIR NOM DE USUARI PER IDUSUARI
 function getNomByUserId(userId,callback)
 {
     $.ajax({
@@ -447,7 +459,7 @@ function showChat(userID) {
     }
     $('#chat_'+userID).slideToggle('slow');
 }
-
+// BUSC I  ELIMINA UNA PETICIO DE JUGAR DINS LA ARRAY
 function findAndRemove(array, valor,callback) {
     $.each(array, function(index, result) {
 
@@ -461,7 +473,7 @@ function findAndRemove(array, valor,callback) {
         }
     });
 }
-
+//GUARDA LES DADES DE LA PARTIDA FINALITZADA AMB QUI HA GUANYAT
 function guardarResultatPartida(playerId,matchid,gameId)
 {
     $.ajax({
@@ -470,7 +482,7 @@ function guardarResultatPartida(playerId,matchid,gameId)
         data: 'MATCHID='+matchid+'GAMEID='+gameid+'&STATE=1&WINNER='+playerId
     });
 }
-
+//GUARDA UNA PARTIDA A LA BD AMB ELS JUGADORS
 function crearPartida(user1,user2,gameid)
 {
     $.ajax({

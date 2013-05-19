@@ -66,10 +66,12 @@ app.get('/games/:id', game.findById);
 app.post('/games', game.findById);
 app.get('/games', game.findAll);
 
+// API REST of MATCHS
 app.get('/matchs', match.findAll);
 app.post('/matchs', match.addMatch);
 app.put('/matchs', match.updateMatchWinner);
 
+//APLI REST of PLAYERS
 app.get('/players', player.findAll);
 app.post('/players', player.addPlayer);
 
@@ -92,24 +94,25 @@ var usersConn=[];  //llista usuaris connectats
 var sockets=[];   //llista de sockets de cada usuari
 var server = http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
-    //#######PROVES SOCKET#########
+    //PROGRAMACIO DELS SOCKETS
     var io = require('socket.io').listen(server);
 
-    //Iniciamos la conexión.
+    //QUAN UN CLIENT FACI PETICIO DE INICIAR CONNECIO
     io.sockets.on('connection', function(socket){
         console.log('Connecton recived');
-        //Emitimos nuestro evento connected
+        //EL SERVIDOR CONTESTA DEMANANT LA IDENTIFICACIO DEL CLIENT
         socket.emit('WhoAreYou');
 
-        //Permanecemos a la escucha del evento click
+        //SI EL SERVIDOR REB MISSATGES CONSESTA HOLA I EL MISSATGE REGUT
+        //S?UTILITZARA PER FER EL XAT
         socket.on('missatge', function(data){
             console.log('Missatge rebut:'+data);
-            //Emitimos el evento que dirá al cliente que hemos recibido el click
-            //y el número de clicks que llevamos
             socket.emit('missatgeRem', 'Hola '+data+'!');
         });
+        //QUAN EL SERVIDOR REB UN MISSATGE DE PRESENTACIO COM A RESPOSTA DEL WhoAreYou
         socket.on('IAm',function(idUser){
             console.log('Presentacio rebuda:'+idUser);
+            //SI L USUARI JA TENIA UNA CONNEXIO  la eliminem   per evitar duplicitat
             var index=usersConn.indexOf(idUser);
             if(index>=0)
             {
@@ -118,11 +121,13 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 sock.disconnect();
                 sockets.splice(index, 1);
             }
+            //AFEGIRM L'USUARI I EL SEU SOCKET
             usersConn.push(idUser);
             sockets.push(socket);
-
+            //AVISEM AL CLIENT QUE EL PROCES DE CONNEXIO S'HA Finalitzat
             socket.emit('connected');
         });
+        //QUAN REBEM UNA DESCONNEXIO ELIMINEM L'USUARI DE LA LLISTA
         socket.on('disconnect', function () {
             console.log('Desconectado!');
             var index=sockets.indexOf(socket);
@@ -132,6 +137,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 usersConn.splice(index, 1);
             }
         });
+        //QUAN REBEM UNA PETICIO DE JUGAR LA REENVIEM A EL DESTINATARI SI SON AMICS
         socket.on('peticioJugar',function(peticio){
             console.log('Peticio rebuda:'+peticio);
             var peticioObj=JSON.parse(peticio);
@@ -139,6 +145,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             existFriendship(peticioObj.myId,peticioObj.hisId,function(result){
                 if(result>0)
                 {
+                    //BUSQUEM EL SOCKET QUE CORRESPON AL USUARI
                     var index=usersConn.indexOf(peticioObj.hisId);
                     if(index>=0)
                     {
@@ -163,6 +170,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             }) ;
 
         });
+        //REBEM UNA ACCEPTAR JUGAR I ES REENVIA A EL USUARI DESTI SI ES QUE SON AMICS
         socket.on('acceptarJugar',function(acceptar){
             console.log('Acceptar peticio rebuta:'+acceptar);
             var peticioObj=JSON.parse(acceptar);
@@ -192,7 +200,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 }
             }) ;
         });
-
+        //SI REBEM UNA JUGADA LA REEINVIEM AL USUARI DESTI SI ES QUE SON AMICS
         socket.on('Jugada',function(jugada){
             console.log('Jugada rebuta:'+jugada);
             var jugadaObj=JSON.parse(jugada);
@@ -214,6 +222,8 @@ var server = http.createServer(app).listen(app.get('port'), function(){
     });
     //############################
 });
+
+//FUNCIO QUE COMPROVA SI 2 USUARIS SON AMICS , si funcio>0--> son amics
 function existFriendship(idUser1,idUser2,callback)
 {
     db.collection('friendships', function(err, collection) {

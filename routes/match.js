@@ -1,13 +1,15 @@
 
 /*
- * GET users listing.
+ * GET MATCHS listing.
  */
 
 exports.list = function(req, res){
   res.send("respond with a resource");
 };
 
-
+/*
+ * RETORNA TOTES LES PARTIDES
+ */
 exports.findAll = function(req, res) {
     db.collection('matchs', function(err, collection) {
         collection.find().toArray(function(err, items) {
@@ -15,7 +17,11 @@ exports.findAll = function(req, res) {
         });
     });
 };
-
+/**
+ * AFEGEIX UNA PARTIDA
+ * @param req
+ * @param res
+ */
 exports.addMatch = function(req, res) {
     console.log('Data: '+ req.body )
     count(function(counter){
@@ -41,7 +47,10 @@ exports.addMatch = function(req, res) {
         });
     });
 }
-
+/**
+ * CONTA LES PARTIDES EXISTENTS PER AUTOGENERAR EL CODI DE PARTIDA
+ * @param cb
+ */
 function count(cb) {
     console.log('COUNT ELEMS')
     db.collection('matchs', function(err, collection) {
@@ -51,7 +60,11 @@ function count(cb) {
         });
     });
 }
-
+/**
+ * FA L?UPDATE DE EL PARTIT PER PODER GUARDAR EL GUANYADOR
+ * @param req
+ * @param res
+ */
 exports.updateMatchWinner = function(req, res) {
    var u= {
         MATCHID: req.body.MATCHID,

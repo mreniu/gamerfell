@@ -1,13 +1,17 @@
 
 /*
- * GET users listing.
+ * GET players listing.
  */
 
 exports.list = function(req, res){
   res.send("respond with a resource");
 };
 
-
+/**
+ * RETORNA TOTS EL JUGADORS DE LA DB
+ * @param req
+ * @param res
+ */
 exports.findAll = function(req, res) {
     db.collection('players', function(err, collection) {
         collection.find().toArray(function(err, items) {
@@ -15,7 +19,11 @@ exports.findAll = function(req, res) {
         });
     });
 };
-
+/**
+ * AFEGEIX UN NOU JUGADOR A LA DB
+ * @param req
+ * @param res
+ */
 exports.addPlayer = function(req, res) {
     console.log('Data: '+ req.body )
     count(function(counter){
@@ -40,7 +48,10 @@ exports.addPlayer = function(req, res) {
         });
     });
 }
-
+/**
+ * CONTA ELS JUGADORS EXISTENTS PER AUTOGENERAR EL CODI DE JUGADOR
+ * @param cb
+ */
 function count(cb) {
     console.log('COUNT ELEMS')
     db.collection('players', function(err, collection) {
