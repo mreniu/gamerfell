@@ -6,6 +6,10 @@
 exports.list = function(req, res){
   res.send("respond with a resource");
 };
+
+/*
+ * GET Game by ID
+ */
 exports.findById = function(req, res) {
     var GAMEID = req.query.id;
     console.log('Adding wine: ' + GAMEID);
@@ -17,6 +21,10 @@ exports.findById = function(req, res) {
         });
     });
 };
+
+/*
+ * GET Games
+ */
 exports.findAll = function(req, res) {
     db.collection('games', function(err, collection) {
         collection.find().toArray(function(err, items) {

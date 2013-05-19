@@ -57,14 +57,17 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/signup', routes.signup);
 
+// API REST of GAMES
 app.get('/games/:id', game.findById);
 app.post('/games', game.findById);
 app.get('/games', game.findAll);
 
+// API REST of FRIENDSHIPS
 app.get('/friendships', friendship.findAll);
 app.post('/friendships', friendship.addFriend);
 app.post('/friendships/findfriends', friendship.findFriends);
 
+// API REST of USERS
 app.get('/users', user.findAll);
 app.get('/users/:id', user.findById);
 app.post('/users', user.addUser);
