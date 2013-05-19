@@ -10,7 +10,6 @@ var jugadaEnemic;
 $(function() {
     jugadaMeva=undefined;
     jugadaEnemic=undefined;
-    var jugadaEnemic;
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
@@ -85,6 +84,7 @@ $(function() {
                $('#boardContent').empty();
                socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
            });
+           jugadaEnemic=jugada1.jugada;
            var result=heGuanyat(jugadaMeva,jugadaEnemic);
            if(result===0)
            {
