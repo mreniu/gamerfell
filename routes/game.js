@@ -7,10 +7,12 @@ exports.list = function(req, res){
   res.send("respond with a resource");
 };
 exports.findById = function(req, res) {
-    var GAMEID = req.body.gameid;
+    var GAMEID = req.query.id;
     console.log('Adding wine: ' + GAMEID);
     db.collection('games', function(err, collection) {
         collection.findOne({'GAMEID':GAMEID}, function(err, item) {
+            console.log('GAME: '+item);
+            console.log('ERROR: '+err);
             res.send(item);
         });
     });

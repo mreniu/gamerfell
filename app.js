@@ -57,6 +57,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/signup', routes.signup);
 
+app.get('/games/:id', game.findById);
 app.post('/games', game.findById);
 app.get('/games', game.findAll);
 

@@ -113,19 +113,36 @@ function handle_drop_patient(event, ui) {
     if(ui.draggable.hasClass("friend"))
     {
         jugadorSel=($(ui.draggable).attr("id"));
-        var divJugador=$('<div/>',{id:'jugadorContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+$('#'+jugadorSel+' .title').html()+"</div>");
-        $('#boardContent #jugadorContent').remove();
-        $('#boardContent').append(divJugador);
+        $.ajax({
+            type: 'GET',
+            url: '/users/:id',
+            data: {'id': jugadorSel},
+            dataType: 'json'
+        }).done(function(data){
+            var divJugador=$('<div/>',{id:'jugadorContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+data.user+"</div><div class='data'><strong>Nom: </strong>"+data.name+"<br/><strong>Cognoms: </strong>"+data.surnames+"<br/><strong>Email: </strong>"+data.email+"</div>");
+            $('#boardContent #jugadorContent').remove();
+            $('#boardContent').append(divJugador);
+        });
+
+
     }else
     {
         jocSel=($(ui.draggable).attr("id"));
-        var divJoc=$('<div/>',{id:'gameContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+$('#'+jocSel+' .title').html()+"</div>");
-        $('#boardContent #gameContent').remove();
-        $('#boardContent').append(divJoc);
+        $.ajax({
+            type: 'GET',
+            url: '/games/:id',
+            data: {'id': jocSel},
+            dataType: 'json'
+        }).done(function(data){
+            var divJoc=$('<div/>',{id:'gameContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+data.NAME+"</div><div class='data'><strong>Descripció: </strong>"+data.DESCRIPTION+"<br/><strong>Nº jugadors: </strong>"+data.NPlayers+"</div>");
+            $('#boardContent #gameContent').remove();
+            $('#boardContent').append(divJoc);
+        });
     }
     //$(ui.draggable).remove();
     if(jocSel != '' && jugadorSel !='')
     {
+        $('#boardContent #botoPeticioPPT').remove();
         //alert("Enviar petició?");
         var botoPeticio=$('<a/>',{id:"botoPeticioPPT",class:"btn"});
         botoPeticio.append("Enviar petició de jugar!");
