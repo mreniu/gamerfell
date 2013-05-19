@@ -51,9 +51,11 @@ $(function() {
     }
 
     divContent.append(divPecesEnemig);
-    divDestiEnemig.append("DESTI ENEMIG");
+    var textDestiEnemig= $('<div/>',{class: 'text'}).append("ESPERA");
+    divDestiEnemig.append(textDestiEnemig);
     divContent.append(divDestiEnemig);
-    divDestiJo.append("DESTI JO!")
+    var textDestiJo= $('<div/>',{class: 'text'}).append("ESCULL!");
+    divDestiJo.append(textDestiJo)
     divContent.append(divDestiJo);
     divContent.append(divPecesJo);
 

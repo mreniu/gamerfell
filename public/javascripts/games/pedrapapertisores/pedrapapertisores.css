@@ -40,6 +40,11 @@ div .pptDesti
     border-radius: 5px;
     background-color: #AAA;
 }
+div .pptDesti .text
+{
+    text-align: center;
+    margin-top: 35px;
+}
 div #appContent
 {
     position:relative;

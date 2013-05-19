@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44184e00-0594-4cbd-9360-ba98a5a2c929" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/application.js" afterPath="$PROJECT_DIR$/public/javascripts/application.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css" afterPath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js" afterPath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" />
     </list>
     <ignored path="gamerfell.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,7 +51,7 @@
       <file leaf-file-name="pedrapapertisores.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="79" column="10" selection-start="1198" selection-end="1198" vertical-scroll-proportion="0.34168565">
+            <state line="41" column="1" selection-start="715" selection-end="715" vertical-scroll-proportion="0.76765376">
               <folding />
             </state>
           </provider>
@@ -63,7 +60,7 @@
       <file leaf-file-name="pedrapapertisores.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="117" column="7" selection-start="5221" selection-end="5221" vertical-scroll-proportion="-11.28">
+            <state line="58" column="34" selection-start="2353" selection-end="2353" vertical-scroll-proportion="-8.72">
               <folding />
             </state>
           </provider>
@@ -484,14 +481,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="117" column="7" selection-start="5221" selection-end="5221" vertical-scroll-proportion="-11.28">
+        <state line="58" column="34" selection-start="2353" selection-end="2353" vertical-scroll-proportion="-8.72">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="10" selection-start="1198" selection-end="1198" vertical-scroll-proportion="0.34168565">
+        <state line="41" column="1" selection-start="715" selection-end="715" vertical-scroll-proportion="0.76765376">
           <folding />
         </state>
       </provider>
