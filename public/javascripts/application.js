@@ -5,9 +5,59 @@ $(function() {
     jocSel= '';
     jugadorSel='';
     nomJocSel='';
+    var peticions;
     if($.cookie('id_user')!=undefined)
         connect();
+   if($.cookie('peticions')!=undefined)
+    {
+        var peticionsCookie= JSON.parse($.cookie('peticions'));
 
+        for(i=0;i<peticionsCookie.length;i++)
+        {
+            var peticioObj=peticionsCookie[i];
+            var nomJoc='';
+            $.ajax({
+                type: 'POST',
+                url: '/games',
+                data: 'gameid='+peticioObj.jocId
+            }).done(function(data){
+                if (data.error == undefined) {
+                    console.log('SUCCES: ' + data);
+                    nomJoc=data.NAME;
+                    var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
+                    var string= "<a href='#'><strong>"+peticioObj.myId+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
+                    li.append(string);
+                    li.click(function()
+                    {
+                        jocSel=$(this).attr('joc');
+                        jugadorSel=$(this).attr('user');
+                        var str="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                        $('#botoPeticions').empty();
+                        $('#botoPeticions').append(str);
+                        $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
+                        {
+                            socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
+                            li.remove();
+                            if($.cookie("peticions")!=undefined)
+                            {
+                                var peticions=JSON.parse($.cookie("peticions"));
+
+                                findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie("id_user")+'","jocId":"'+jocSel+'"}')) ;
+                            }
+                            $.cookie("peticions",JSON.stringify(peticions));
+                            var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
+                            $('#botoPeticions').empty();
+                            $('#botoPeticions').append(string2);
+                        });
+                    });
+                    $('#llistaPeticions').append(li);
+                    var string2="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                    $('#botoPeticions').empty();
+                    $('#botoPeticions').append(string2);
+                }
+            });
+        }
+    }
     /*$("#botoProva1").click(function () {
         var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>user"+var1+"</div><div class='desc'>desc desc</div></div>"
         var div=$('<div/>',{id:'user'+var1,class:'friend ui-widget-content draggable'}).append( string )
@@ -107,6 +157,17 @@ function connect(callback) {
             if (data.error == undefined) {
                 console.log('SUCCES: ' + data);
                 nomJoc=data.NAME;
+                if($.cookie("peticions")===undefined)
+                {
+                    peticions=[];
+                    peticions.push(peticioObj);
+                }
+                else
+                {
+                    peticions=JSON.parse($.cookie("peticions"));
+                    peticions.push(peticioObj);
+                }
+                $.cookie("peticions", JSON.stringify(peticions));
                 var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
                 var string= "<a href='#'><strong>"+peticioObj.myId+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
                 li.append(string);
@@ -121,7 +182,14 @@ function connect(callback) {
                     {
                         socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
                         li.remove();
-                        var string2="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                        if($.cookie("peticions")!=undefined)
+                        {
+                            var peticions=JSON.parse($.cookie("peticions"));
+
+                            var index=findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie('id_user')+'","jocId":"'+jocSel+'"}'));
+                        }
+                        $.cookie("peticions", JSON.stringify(peticions));
+                        var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
                         $('#botoPeticions').empty();
                         $('#botoPeticions').append(string2);
                     });
@@ -317,4 +385,15 @@ function showChat(userID) {
         $('#'+userID).removeClass('open-message');
     }
     $('#chat_'+userID).slideToggle('slow');
+}
+
+function findAndRemove(array, valor) {
+    $.each(array, function(index, result) {
+
+        if(result.myId === valor.myId && result.hisId === valor.hisId && result.gameId === valor.gameId) {
+            //Remove from array
+            array.splice(index, 1);
+            console.log("ELIMINAT DE COOKIE inde:"+index+"!");
+        }
+    });
 }

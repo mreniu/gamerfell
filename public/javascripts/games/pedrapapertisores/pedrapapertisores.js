@@ -134,41 +134,59 @@ function handle_drop_patient(event, ui) {
             $('#boardContent').empty();
             $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR){});
         });
-        if(heGuanyat(jugadaMeva,jugadaEnemic))
+        var result=heGuanyat(jugadaMeva,jugadaEnemic);
+        if(result===0)
         {
             var img1=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
             resultat.append(img1);
-            resultat.append(botoTancar);
-            resultat.append(botoTornar);
-        }else
+        }else if(result===1)
         {
             var img1=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
             resultat.append(img1);
-            resultat.append(botoTancar);
-            resultat.append(botoTornar);
+        } else if(result===2)
+        {
+            var img1=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
+            resultat.append(img1);
         }
+        resultat.append(botoTancar);
+        resultat.append(botoTornar);
         $(document.body).append(resultat);
     }
 }
 function heGuanyat(meva,seva)
 {
     console.log("MEVA:"+meva+" SEVA:"+seva);
-    if(meva==='scissors' && seva==='paper'
-        || meva==='spock' && seva==='scissors'
-        || meva==='lizard' && seva==='spock'
-        || meva==='rock' && seva==='lizard'
-        || meva==='paper' && seva==='rock'
-        || meva==='paper' && seva==='spock'
-        || meva==='lizard' && seva==='paper'
-        || meva==='rock' && seva==='scissors'
-        || meva==='scissors' && seva==='lizard'
-        || meva==='spock' && seva==='rock')
+    if((meva==='scissors' && seva==='paper')
+        || (meva==='spock' && seva==='scissors')
+        || (meva==='lizard' && seva==='spock')
+        || (meva==='rock' && seva==='lizard')
+        || (meva==='paper' && seva==='rock')
+        || (meva==='paper' && seva==='spock')
+        || (meva==='lizard' && seva==='paper')
+        || (meva==='rock' && seva==='scissors')
+        || (meva==='scissors' && seva==='lizard')
+        || (meva==='spock' && seva==='rock'))
     {
         console.log("HE GUANYAT");
-        return true;
+        return 0;
+    }
+    else if((seva==='scissors' && meva==='paper')
+        || (seva==='spock' && meva==='scissors')
+        || (seva==='lizard' && meva==='spock')
+        || (seva==='rock' && meva==='lizard')
+        || (seva==='paper' && meva==='rock')
+        || (seva==='paper' && meva==='spock')
+        || (seva==='lizard' && meva==='paper')
+        || (seva==='rock' && meva==='scissors')
+        || (seva==='scissors' && meva==='lizard')
+        || (seva==='spock' && meva==='rock'))
+    {
+        console.log("HE PERDUT");
+        return 1;
     }
     else
     {
-        console.log("HE PERDUT");
-    }    return false;
+        console.log("HE EMPATAT");
+        return 2;
+    }
 }

@@ -155,9 +155,20 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 if(result>0)
                 {
                     var index=usersConn.indexOf(peticioObj.hisId);
-                    socket2=sockets[index];
-                    socket2.emit('acceptarJugar',acceptar);
-                    console.log('Acceptar reenviat a:'+peticioObj.hisId);
+                    if(index>=0)
+                    {
+                        socket2=sockets[index];
+                        if(socket2!=undefined)
+                        {
+                            socket2.emit('acceptarJugar',acceptar);
+                            console.log('Acceptar reenviat a:'+peticioObj.hisId);
+                        }else
+                        {
+                            console.log('Socket2 undefined:'+peticioObj.hisId);
+                            usersConn.slice(index,1);
+                        }
+                    }else
+                        console.log("L'usuari no esta connectat:"+peticioObj.hisId);
                 }else
                 {
                     console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
