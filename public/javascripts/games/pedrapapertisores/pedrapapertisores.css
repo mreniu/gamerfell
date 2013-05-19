@@ -3,14 +3,17 @@ div .gameHeader
     height: 10%;
     width: 95%;
     margin: 0 auto;
-    background: red;
+    /*background: red;*/
+    text-align: center;
+    font-size: 18px;
 }
 div .gameContent
 {
     postion: relative;
     height: 90%;
     width: 95%;
-    background: blue;
+    /*background: blue;*/
+    margin: 0 auto;
 }
 div.gameContent .pptPeces
 {
@@ -18,6 +21,7 @@ div.gameContent .pptPeces
     background: green;
     padding: 10px 10px 10px;
     border-radius: 10px;
+    text-align: center;
 }
 div.gameContent #pptPecesJo
 {
@@ -27,8 +31,19 @@ div .pptDesti
 {
     position:relative;
     height:100px;
-    width:95%;
-    background: purple;
+    /*width:95%;*/
+    width: 100px;
+    /*background: purple;*/
+    margin: 10px auto;
+    padding: 5px;
+    border: 2px solid green;
+    border-radius: 5px;
+    background-color: #AAA;
+}
+div .pptDesti .text
+{
+    text-align: center;
+    margin-top: 35px;
 }
 div #appContent
 {
@@ -48,7 +63,7 @@ div #appContent
 }
 #pptDestiJo.hoverDrop
 {
-    background: #AAA!important;
+    background: #777!important;
 }
 
 #pptDestiJo img
@@ -65,8 +80,24 @@ div #appContent
 }
 #resultatPPT
 {
-    postion:static;
-    top: 0px;
-    left:0px;
-    z-index: 10000000;
+    position: fixed;
+    top: 30%;
+    left: 12%;
+    z-index: 1000;
+    display: none;
+}
+#resultatPPT img {
+    width: 400px;
+    height: 323px;
+}
+#resultatPPT #botoResultatPPT
+{
+    position: absolute;
+    top: 40%;
+    left: 15%;
+    z-index: 1001;
+    background-color: #777;
+    padding: 30px;
+    border-radius: 10px;
+    display: none;
 }

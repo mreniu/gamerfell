@@ -283,6 +283,12 @@ div.panel .btn{
         font-size: 20px;
         font-weight: bold;
     }
+
+    #botoPeticioPPT {
+        position: absolute;
+        bottom: 25%;
+        left: 38%;
+    }
     /************************
              FRIENDS
     ************************/

@@ -126,7 +126,7 @@ function handle_drop_patient(event, ui) {
     //$(ui.draggable).remove();
     if(jocSel != '' && jugadorSel !='')
     {
-        alert("Enviar petició?");
+        //alert("Enviar petició?");
         var botoPeticio=$('<a/>',{id:"botoPeticioPPT",class:"btn"});
         botoPeticio.append("Enviar petició de jugar!");
         botoPeticio.click(function()
