@@ -242,8 +242,9 @@ function getFriendList(){
 };
 
 function addFriendToList(friend) {
-    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+friend.user+"</div><div class='desc'>desc desc</div></div>"
-    var div=$('<div/>',{id: friend.USERID,class:'friend ui-widget-content draggable'}).append( string )
+    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+friend.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat('"+friend.USERID+"')'><img class='ic-chat'></a></div>"
+    var div=$('<div/>',{id: friend.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string )
+    var chat_div=$('<div/>',{id: 'chat_'+friend.USERID, class:'chat'})
     div.draggable(
         {
             revert:'invalid',
@@ -251,6 +252,7 @@ function addFriendToList(friend) {
             opacity: 0.5
         });
     $("#friendsList").append(div);
+    $(div).after(chat_div);
 };
 
 function addFriendToListWithSearch(friend){
@@ -265,8 +267,9 @@ function addFriendToListWithSearch(friend){
         data: {'id': id_friend},
         dataType: 'json'
     }).done(function(data){
-            var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+data.user+"</div><div class='desc'>desc desc</div></div>"
-            var div=$('<div/>',{id: data.USERID,class:'friend ui-widget-content draggable'}).append( string )
+            var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+data.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat(\""+data.USERID+"\")'><img class='ic-chat'></a></div>"
+            var div=$('<div/>',{id: data.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string )
+            var chat_div=$('<div/>',{id: 'chat_'+data.USERID, class:'chat'})
             div.draggable(
                 {
                     revert:'invalid',
@@ -274,6 +277,7 @@ function addFriendToListWithSearch(friend){
                     opacity: 0.5
                 });
             $("#friendsList").append(div);
+            $(div).after(chat_div);
     });
 }
 
@@ -301,3 +305,12 @@ function addGameToList(game) {
     $("#gamesList").append(div);
 };
 
+/*****     CHAT      *****/
+function showChat(userID) {
+    if ($('#'+userID).attr('class').match(/message/)){
+        $('#'+userID).removeClass('message').addClass('open-message');
+    } else {
+        $('#'+userID).removeClass('open-message');
+    }
+    $('#chat_'+userID).slideToggle('slow');
+}
