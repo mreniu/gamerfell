@@ -69,6 +69,7 @@ $(function() {
            $('#pptDestiEnemic').empty();
            $('#pptDestiEnemic').append(imgEnem);
            var resultat=$('<div/>',{id:'resultatPPT'});
+           var botoResultat=$('<div/>',{id:'botoResultatPPT'});
            var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
            botoTancar.append("Tancar joc");
            botoTancar.click(function()
@@ -99,11 +100,14 @@ $(function() {
                var img1=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
                resultat.append(img1);
            }
-           resultat.append(botoTancar);
-           resultat.append(botoTornar);
+           botoResultat.append(botoTancar);
+           botoResultat.append(botoTornar);
            jugadaEnemic=undefined;
            jugadaMeva=undefined;
-           $(document.body).append(resultat);
+           $(document.body).append(resultat).delay(3000);
+           resultat.show('clip',1000);
+           resultat.append(botoResultat);
+           botoResultat.delay(2000).show('clip',1000);
        }else
        {
            jugadaEnemic=jugada1.jugada;
@@ -125,6 +129,7 @@ function handle_drop_patient(event, ui) {
         $('#pptDestiEnemic').empty();
         $('#pptDestiEnemic').append(imgEnem);
         var resultat=$('<div/>',{id:'resultatPPT'});
+        var botoResultat=$('<div/>',{id:'botoResultatPPT'});
         var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
         botoTancar.append("Tancar joc");
         botoTancar.click(function()
@@ -154,11 +159,14 @@ function handle_drop_patient(event, ui) {
             var img1=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
             resultat.append(img1);
         }
-        resultat.append(botoTancar);
-        resultat.append(botoTornar);
+        botoResultat.append(botoTancar);
+        botoResultat.append(botoTornar);
         jugadaEnemic=undefined;
         jugadaMeva=undefined;
-        $(document.body).append(resultat);
+        $(document.body).append(resultat).delay(3000);
+        resultat.show('clip',1000);
+        resultat.append(botoResultat);
+        botoResultat.delay(2000).show('clip',1000);
     }
 }
 function heGuanyat(meva,seva)
