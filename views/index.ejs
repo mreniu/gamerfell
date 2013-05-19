@@ -71,7 +71,22 @@
       </div>
       <div id ="friendsPanel">
         <div id="friendsTitle" class="title">
-          <div class="panel">Amics</div>
+          <div class="panel">Amics <a id="botoAfegirAmic" class="btn" onclick="$('#addFriendPanel').show();"><i class="icon-plus"></i></a></div>
+          <div id="addFriendPanel">
+            <a class="btn" onclick="$('#addFriendPanel').hide();" style="position: absolute; top: 10px; right: 10px;"><i class="icon-remove"></i></a>
+            <form id="addFriendHere">
+              <div class="field">
+                <label><b>Afegir amic</b></label>
+              </div>
+              <div class="field" style="margin-bottom: 5px">
+                <label>Usuari:</label>
+                <input type="text" id="friend_username" name="user"/>
+              </div>
+              <div class="submit">
+                <a id="botoAddFriend" class="btn">Afegir</a>
+              </div>
+            </form>
+          </div>
         </div>
         <div id="friendsList" class="content"></div>
       </div>

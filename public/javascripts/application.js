@@ -201,3 +201,25 @@ function uploadUser(userID){
         $('#user').css('display','');
     });
 }
+
+/******    ADD FRIEND      ******/
+$(document).ready(function(){
+    $('#botoAddFriend').click(function(){
+        console.log('Adding user');
+        $.ajax({
+            type: 'POST',
+            url: '/friendships',
+            data: {'id_user':$.cookie('id_user'), 'id_friend': $('#addFriendHere input#friend_username').val()}
+        }).done(function(data){
+            if (data.error != undefined){
+                console.log('ERROR: '+ data.error);
+                alert('ERROR: '+ data.error);
+            } else {
+                alert(data.success);
+                alert("AMIC: "+ data.friend);
+                $('#addFriendHere input#friend_username').val('');
+                $('#addFriendPanel').hide();
+            }
+        });
+    });
+});

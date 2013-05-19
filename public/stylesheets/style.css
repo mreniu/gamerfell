@@ -48,6 +48,7 @@ button.btn, a.btn, input[type='submit'].btn {
         0px 1px 0px rgba(255,255,255,0.3);
 }
 div.panel{
+    position: relative;
     background: #198cff;
     width: 60%;
     margin: 0 auto;
@@ -66,6 +67,11 @@ div.panel{
     text-shadow:
         0px -1px 0px rgba(000,000,000,0.4),
         0px 1px 0px rgba(255,255,255,0.3);
+}
+div.panel .btn{
+    position: absolute;
+    right: 10px;
+    top: 0;
 }
 /**************
     HEADER
@@ -283,6 +289,15 @@ div.panel{
         background-color: #cdf;
         border-radius: 3px 3px 3px 3px;
         border-bottom: 2px solid #777;
+    }
+
+    #friendsPanel #addFriendPanel {
+        display: none;
+        position: absolute;
+        background: #AAA;
+        margin-top: 5px;
+        border-radius: 10px;
+        padding: 10px 0;
     }
 
     /*****************
