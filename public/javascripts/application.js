@@ -102,16 +102,18 @@ function handle_drop_patient(event, ui) {
     if(ui.draggable.hasClass("friend"))
     {
         jugadorSel=($(ui.draggable).attr("id"));
-        var divJugador=$('<div/>',{id:'jugadorContent'}).append( "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' />Xavier Sendra Granell");
+        var divJugador=$('<div/>',{id:'jugadorContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+$('#'+jugadorSel+' .title').html()+"</div>");
+        $('#boardContent #jugadorContent').remove();
         $('#boardContent').append(divJugador);
     }else
     {
         jocSel=($(ui.draggable).attr("id"));
-        var divJoc=$('<div/>',{id:'gameContent'}).append( "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' />TIC-TAC-TOE");
+        var divJoc=$('<div/>',{id:'gameContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+$('#'+jocSel+' .title').html()+"</div>");
+        $('#boardContent #gameContent').remove();
         $('#boardContent').append(divJoc);
     }
-    $(ui.draggable).remove();
-    if(jocSel != '' && jugadorSel !='')
+    //$(ui.draggable).remove();
+    if(jocSel != '' && jugadorSel !='' && false)
     {
         alert("Enviar petició?");
         if(socket==='')
@@ -366,7 +368,7 @@ function getGameList(){
 };
 
 function addGameToList(game) {
-    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+game.NAME+"</div><div class='desc'>WIN: 0 LOSE:999</div></div>"
+    var string= "<img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+game.NAME+"</div><div class='desc'>WIN: 0 LOSE:999</div></div>"
     var div=$('<div/>',{id: game.GAMEID,class:'game ui-widget-content draggable'}).append( string )
     div.draggable(
         {
