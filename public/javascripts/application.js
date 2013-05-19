@@ -1,6 +1,4 @@
 $(function() {
-    //var var1=0;
-    //var var2=0;
     socket='';
     jocSel= '';
     jugadorSel='';
@@ -72,68 +70,60 @@ $(function() {
             });
         }
     }
-    /*$("#botoProva1").click(function () {
-        var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>user"+var1+"</div><div class='desc'>desc desc</div></div>"
-        var div=$('<div/>',{id:'user'+var1,class:'friend ui-widget-content draggable'}).append( string )
-        div.draggable(
-        {
-            revert:'invalid',
-            helper: 'clone',
-            opacity: 0.5
-        });
-        $("#friendsList").append(div);
-        var1=var1+1;
-    });*/
 
-
-    /*$("#botoProva2").click(function () {
-        var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>game"+var2+"</div><div class='desc'>WIN: 0 LOSE:999</div></div>"
-        var div2=$('<div/>',{id:'game'+var2,class:'game ui-widget-content draggable'}).append( string )
-        div2.draggable(
-        {
-            revert:'invalid',
-            helper: 'clone',
-            opacity: 0.5
-        });
-        $("#gamesList").append(div2);
-        var2=var2+1;
-        //####PROVA SOCKET###
-        //connect(function(userId1,userId2,jocId){
-        //    socket.emit('peticioJugar',"{'myId':"+userId1+",'hisId':"+userId2+",'jocId:"+jocId+"}");
-        //});
-        //##################
-    });*/
-
+    // Creació de l'event Droppable al tauler
     $('#boardContent').droppable({
         accept: ".friend,.game",
         hoverClass: 'hoverDrop',
         drop: handle_drop_patient
     });
-
 });
 function handle_drop_patient(event, ui) {
     $(ui.draggable).addClass("ui-state-selected");
-    if(ui.draggable.hasClass("friend"))
+    if(ui.draggable.hasClass("friend")) // Hem afegit un amic al tauler
     {
+        // Petició de l'objecte User de amic
         jugadorSel=($(ui.draggable).attr("id"));
-        var divJugador=$('<div/>',{id:'jugadorContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+$('#'+jugadorSel+' .title').html()+"</div>");
-        $('#boardContent #jugadorContent').remove();
-        $('#boardContent').append(divJugador);
-    }else
+        $.ajax({
+            type: 'GET',
+            url: '/users/:id',
+            data: {'id': jugadorSel},
+            dataType: 'json'
+        }).done(function(data){
+            // Creació i adhesió del amic al DOM del tauler
+            var divJugador=$('<div/>',{id:'jugadorContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+data.user+"</div><div class='data'><strong>Nom: </strong>"+data.name+"<br/><strong>Cognoms: </strong>"+data.surnames+"<br/><strong>Email: </strong>"+data.email+"</div>");
+            $('#boardContent #jugadorContent').remove();
+            $('#boardContent').append(divJugador);
+        });
+    }else // Hem afegit un joc al tauler
     {
+        //Petició de l'objecte Game
         jocSel=($(ui.draggable).attr("id"));
-        var divJoc=$('<div/>',{id:'gameContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+$('#'+jocSel+' .title').html()+"</div>");
-        $('#boardContent #gameContent').remove();
-        $('#boardContent').append(divJoc);
+        $.ajax({
+            type: 'GET',
+            url: '/games/:id',
+            data: {'id': jocSel},
+            dataType: 'json'
+        }).done(function(data){
+            // Creació i addhesió del joc al DOM del tauler
+            var divJoc=$('<div/>',{id:'gameContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+data.NAME+"</div><div class='data'><strong>Descripció: </strong>"+data.DESCRIPTION+"<br/><strong>Nº jugadors: </strong>"+data.NPlayers+"</div>");
+            $('#boardContent #gameContent').remove();
+            $('#boardContent').append(divJoc);
+        });
     }
-    //$(ui.draggable).remove();
+
+    // Existeix un amic i un joc al tauler
     if(jocSel != '' && jugadorSel !='')
     {
-        //alert("Enviar petició?");
+        // Esborrem l'antic botó de petició
+        $('#boardContent #botoPeticioPPT').remove();
+
+        // Creació del DOM
         var botoPeticio=$('<a/>',{id:"botoPeticioPPT",class:"btn"});
         botoPeticio.append("Enviar petició de jugar!");
         botoPeticio.click(function()
         {
+            // Comprovació de socket
             if(socket==='')
             {
                 connect(function(userId1,userId2,jocId){
@@ -146,6 +136,7 @@ function handle_drop_patient(event, ui) {
             }
             $('#boardContent').append("<div class='avisPeticio'>Petició enviada!</div>") ;
         });
+        // Afegir boto al DOM
         $('#boardContent').append(botoPeticio);
 
     }
@@ -248,7 +239,7 @@ function connect(callback) {
         $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
         {});
     });
-    //socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+$(this).attr('user')+'","jocId":"'+$(this).attr('joc')+'"}');
+
     //#6 Si nos desconectamos, muestra el log y cambia el mensaje.
     socket.on('disconnect', function () {
         console.log('Desconectado!');
@@ -260,20 +251,24 @@ function connect(callback) {
 /******    LOGIN      ******/
 
 $(document).ready(function(){
+    // Creació de l'event de petició de login
     $('#botoLogin').click(function(){
         console.log('Login user');
+        // Petició login a User
         $.ajax({
             type: 'POST',
             url: '/users/login',
             data: $('#loginHere').serialize()
         }).done(function(data){
-            if (data.error === undefined) {
+            if (data.error === undefined) { // El login no ha trobat cap error
                 console.log('SUCCES: ' + data.success);
+                // Creem la cookie de sessió
                 $.cookie('id_user', data.id);
-                //alert('SUCCES: '+data.success);
+                // Si estem a la pagina de Registre, redireccionar al root
                 if (window.location.pathname.match(/signup/) != undefined) {
                     window.location.href = "/";
                 } else {
+                    // Actualitzem panell d'usuari, i llistat d'amics i jocs
                     uploadUser(data.id);
                     getGameList();
                     getFriendList();
@@ -292,6 +287,7 @@ $(document).ready(function(){
     });
 });
 $(function(){
+    // Si existeix la cookie de sessió d'usuari...
     if ($.cookie('id_user') != undefined){
         uploadUser($.cookie('id_user'));
         getGameList();
@@ -301,6 +297,8 @@ $(function(){
         $('#login').css('display','');
     }
 });
+
+// Actualitzem el panell d'usuari
 function uploadUser(userID){
     console.log('getlogin');
     $.ajax({
@@ -317,8 +315,10 @@ function uploadUser(userID){
 
 /******    FRIENDS      ******/
 $(document).ready(function(){
+    // Creació de l'event per afegir amic
     $('#botoAddFriend').click(function(){
         console.log('Adding user');
+        // Petició addFriend
         $.ajax({
             type: 'POST',
             url: '/friendships',
@@ -329,6 +329,7 @@ $(document).ready(function(){
                 alert('ERROR: '+ data.error);
             } else {
                 alert(data.success);
+                // Afegim amics al llistat d'amics
                 addFriendToList(data.friend);
                 $('#addFriendHere input#friend_username').val('');
                 $('#addFriendPanel').hide();
@@ -337,6 +338,7 @@ $(document).ready(function(){
     });
 });
 
+// Busquem llistat d'amics
 function getFriendList(){
     $.ajax({
         type: 'POST',
@@ -349,7 +351,9 @@ function getFriendList(){
     });
 };
 
+// Afegim un usuari al llistat d'amics segons un objecte USER
 function addFriendToList(friend) {
+    // Creem estructura DOM
     var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+friend.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat('"+friend.USERID+"')'><img class='ic-chat'></a></div>"
     var div=$('<div/>',{id: friend.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string )
     var chat_div=$('<div/>',{id: 'chat_'+friend.USERID, class:'chat'})
@@ -359,22 +363,29 @@ function addFriendToList(friend) {
             helper: 'clone',
             opacity: 0.5
         });
+
+    // Afegim usuari al llistat d'amics
     $("#friendsList").append(div);
     $(div).after(chat_div);
 };
 
+// Afegim un usuari al llistat d'amics segons un objecte FRIENDSHIP
 function addFriendToListWithSearch(friend){
+    // Busquem el USERID del amic
     var id_friend;
     if (friend.USERID == $.cookie('id_user')) {
         id_friend = friend.USERID2;
     } else { id_friend = friend.USERID; }
     console.log('FRIEND: '+id_friend);
+
+    // Petició de userByID
     $.ajax({
         type: 'GET',
         url: '/users/:id',
         data: {'id': id_friend},
         dataType: 'json'
     }).done(function(data){
+            // Creem estructura DOM
             var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+data.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat(\""+data.USERID+"\")'><img class='ic-chat'></a></div>"
             var div=$('<div/>',{id: data.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string )
             var chat_div=$('<div/>',{id: 'chat_'+data.USERID, class:'chat'})
@@ -384,6 +395,7 @@ function addFriendToListWithSearch(friend){
                     helper: 'clone',
                     opacity: 0.5
                 });
+            // Afegim usuari al llistat d'amics
             $("#friendsList").append(div);
             $(div).after(chat_div);
     });
@@ -400,6 +412,7 @@ function getNomByUserId(userId,callback)
     });
 }
 /******    GAMES      ******/
+// Obtenim llistat de GAMES del sistema
 function getGameList(){
     $.ajax({
         type: 'GET',
@@ -411,6 +424,7 @@ function getGameList(){
         });
 };
 
+// Afegeix un GAME a la llista segons un objecte GAME
 function addGameToList(game) {
     var string= "<img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+game.NAME+"</div><div class='desc'>WIN: 0 LOSE:999</div></div>"
     var div=$('<div/>',{id: game.GAMEID,class:'game ui-widget-content draggable'}).append( string )
@@ -424,6 +438,7 @@ function addGameToList(game) {
 };
 
 /*****     CHAT      *****/
+// Mostrem o ocultem el DOM del CHAT
 function showChat(userID) {
     if ($('#'+userID).attr('class').match(/message/)){
         $('#'+userID).removeClass('message').addClass('open-message');

@@ -265,6 +265,10 @@ div.panel .btn{
         font-size: 20px;
         font-weight: bold;
     }
+    #gameContent .data {
+        margin: 20px auto;
+        max-width: 275px;
+    }
 
     #jugadorContent{
         float:right;
@@ -283,11 +287,16 @@ div.panel .btn{
         font-size: 20px;
         font-weight: bold;
     }
+    #jugadorContent .data {
+        margin: 20px auto;
+        max-width: 275px;
+    }
 
     #botoPeticioPPT {
         position: absolute;
         bottom: 25%;
         left: 38%;
+        z-index: 1000;
     }
     /************************
              FRIENDS

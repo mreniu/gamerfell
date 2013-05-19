@@ -7,6 +7,9 @@ exports.list = function(req, res){
   res.send("respond with a resource");
 };
 
+/*
+ * GET User by ID
+ */
 
 exports.findById = function(req, res) {
     var id = req.query.id;
@@ -20,6 +23,10 @@ exports.findById = function(req, res) {
     });
 };
 
+/*
+ * Get Users
+ */
+
 exports.findAll = function(req, res) {
     db.collection('users', function(err, collection) {
         collection.find().toArray(function(err, items) {
@@ -28,8 +35,14 @@ exports.findAll = function(req, res) {
     });
 };
 
+/*
+ * POST Add User
+ */
+
 exports.addUser = function(req, res) {
     console.log('Data: '+ req.body )
+
+    // Obtenim numero de usuaris al sistema
     count(function(counter){
         var u= {
             USERID: 'user'+(counter+1),
@@ -39,17 +52,19 @@ exports.addUser = function(req, res) {
             email: req.body.email,
             password: req.body.password
         };
+        // Busquem usuari per USER i per EMAIL
         db.collection('users', function(err, collection) {
             collection.findOne({$or: [{user: req.body.user},{email: req.body.email}]}, function(err, result) {
                 if (result != null) {
                     console.log('ERROR: User already exist');
-                    if (result.email == req.body.email) {
+                    if (result.email == req.body.email) { // MAtch en EMAIL
                         res.send({'error':"Ja existeix un usuari amb aquest email"});
-                    } else {
+                    } else { // MATCH en USER
                         res.send({'error':"Ja existeix un usuari amb el mateix nom d'usuari"});
                     }
 
                 } else {
+                    // Afegim usuari al sistema
                     console.log('Adding user: ' + JSON.stringify(u));
                     db.collection('users', function(err, collection) {
                         collection.insert(u, {safe:true}, function(err, result) {
@@ -58,6 +73,7 @@ exports.addUser = function(req, res) {
                             } else {
                                 console.log('Success: ' + JSON.stringify(result[0]));
                                 req.session.id_user = result[0].USERID;
+                                // Retornem el USERID del usuari
                                 res.send({'id': result[0].USERID});
                             }
                         });
@@ -67,6 +83,11 @@ exports.addUser = function(req, res) {
         });
     });
 }
+
+/*
+ * POST Update User
+ *      No es fa servir
+ */
 
 exports.updateUser = function(req, res) {
     var id = req.params.id;
@@ -92,6 +113,10 @@ exports.updateUser = function(req, res) {
     });
 }
 
+/*
+ * DELETE Erase User
+ *      No es fa servir
+ */
 exports.deleteUser = function(req, res) {
     var id = req.params.id;
     console.log('Deleting user: ' + id);
@@ -107,29 +132,38 @@ exports.deleteUser = function(req, res) {
     });
 }
 
+/*
+ * POST Get USERID from login
+ */
 exports.loginUser = function(req, res) {
     console.log("USER: "+req.body.user+" PASS: "+req.body.password)
+    // Busquem usuari per USER i PASSWORD
     db.collection('users', function(err, collection) {
         collection.findOne({'user': req.body.user,'password': req.body.password}, function(err, item) {
             console.log('ITEM: '+ item);
-            if (item == undefined) {
+            if (item == undefined) { // No hem trobat usuari
                 console.log('ERROR')
                 res.send({"error": "Usuari i/o password no són correctes"});
             } else {
                 console.log('SUCCESS')
                 req.session.id_user = item._id;
+                // Retornem el USERID del usuari
                 res.send({'success': 'Loguejat','id':item.USERID})
             }
         });
     });
 }
 
+/*
+ * POST Get User from cookie
+ */
 exports.getLogin = function(req, res) {
     var id = req.body.id;
     console.log('ID ARRIVE: ' + id);
     if (id == null) {
         res.send({'error': "No hi ha sessio"});
     } else {
+        // Busquem usuari amb USERID
         db.collection('users', function(err, collection) {
             collection.findOne({'USERID': id}, function(err, item) {
                 if (err) {
@@ -142,6 +176,9 @@ exports.getLogin = function(req, res) {
     }
 }
 
+/*
+ * FUNCTION Get number of users
+ */
 function count(cb) {
     console.log('COUNT ELEMS')
     db.collection('users', function(err, collection) {
