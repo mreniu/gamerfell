@@ -145,6 +145,11 @@ div.panel .btn{
 #user-panel #user .user-logout a {
     margin-right: 0;
 }
+
+#peticions {
+    float: right;
+    margin: 15px;
+}
 /***************
     APPBODY
 ***************/
@@ -219,6 +224,11 @@ div.panel .btn{
         width: 50px;
     }
 
+    #gamesList .game.ui-draggable-dragging { display: inline-table; width: 50px;}
+    #gamesList .game.ui-draggable-dragging .imgPerfil { width: 50px; height: 47px;}
+    #gamesList .game.ui-draggable-dragging .text { margin: 5px auto 0 }
+    #gamesList .game.ui-draggable-dragging .desc { display: none }
+
     /************************
               BOARD
     ************************/
@@ -239,17 +249,40 @@ div.panel .btn{
     }
     #gameContent{
         float:left;
+        position: relative;
         width: 50%;
         height: 95%;
         background-color: #cdf;
     }
+    #gameContent .image {
+        margin: 30px auto;
+        width: 180px;
+    }
+
+    #gameContent .text {
+        width: 100%;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
     #jugadorContent{
         float:right;
         width: 50%;
         height: 95%;
         background-color: #cdf;
     }
+    #jugadorContent .image {
+        margin: 30px auto;
+        width: 180px;
+    }
 
+    #jugadorContent .text {
+        width: 100%;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+    }
     /************************
              FRIENDS
     ************************/
@@ -327,17 +360,12 @@ div.panel .btn{
         width: 20px;
     }
 
-    #friendsList .friend.ui-state-selected{
-        margin: 5px auto;
-        vertical-align: middle;
-        display: block;
-        padding: 3px;
-        width: 95%;
-        height: 30px;
-        background-color: #cdf;
-        border-radius: 3px 3px 3px 3px;
-        border-bottom: 2px solid #777;
-    }
+    #friendsList .friend.ui-draggable-dragging { display: inline-table; width: 50px; }
+    #friendsList .friend.ui-draggable-dragging .imgPerfil { width: 50px; height: 47px;}
+    #friendsList .friend.ui-draggable-dragging .connected-icon { display: none }
+    #friendsList .friend.ui-draggable-dragging .text { margin: 5px auto 0 }
+    #friendsList .friend.ui-draggable-dragging .desc { display: none }
+    #friendsList .friend.ui-draggable-dragging .chat-button { display: none }
 
     #friendsList .chat {
         background: #cdf;
