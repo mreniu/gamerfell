@@ -10,44 +10,48 @@ var jugadaEnemic;
 $(function() {
     jugadaMeva=undefined;
     jugadaEnemic=undefined;
+    socket.removeAllListeners("Jugada");
+    $(".ppt").unbind();
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
         href: "/javascripts/games/pedrapapertisores/pedrapapertisores.css"
     }).appendTo("head");
     $('#boardContent').empty();
-    var div=$('<div/>',{id:'pedrapapertisoresPanel'});
-    var divHeader=$('<div/>',{id:'pptHeader',class:'gameHeader'});
-    divHeader.append("Estas jugant a <strong>Pedra-Paper-Tisores-Llangardaix-Spock</strong> contra <strong> ?? </strong>");
-    var divContent=$('<div/>',{id:'pptContent',class:'gameContent'});
-    var divPecesEnemig=$('<div/>',{id:'pptPecesEnemic',class:'pptPeces'});
-    var divDestiEnemig=$('<div/>',{id:'pptDestiEnemic',class:'pptDesti'});
-    var divDestiJo=$('<div/>',{id:'pptDestiJo',class:'pptDesti'});
+    var div=$('<div/>',{id:'pedrapapertisoresPanel', class:'ppt'});
+    var divHeader=$('<div/>',{id:'pptHeader',class:'gameHeader ppt'});
+    divHeader.append("Estas jugant a <strong>Pedra-Paper-Tisores-Llangardaix-Spock</strong> contra <strong> jugadorSel </strong>");
+    var divContent=$('<div/>',{id:'pptContent',class:'gameContent ppt'});
+    var divPecesEnemig=$('<div/>',{id:'pptPecesEnemic',class:'pptPeces ppt'});
+    var divDestiEnemig=$('<div/>',{id:'pptDestiEnemic',class:'pptDesti ppt'});
+
+    var divDestiJo= $('<div/>',{id:'pptDestiJo',class:'pptDesti ppt'});
+
     divDestiJo.droppable({
         accept: ".imgJocPPTJo",
         hoverClass: 'hoverDrop',
         drop: handle_drop_patient
     });
-    var divPecesJo=$('<div/>',{id:'pptPecesJo',class:'pptPeces'});
+    var divPecesJo=$('<div/>',{id:'pptPecesJo',class:'pptPeces ppt'});
     var arrayImgs= ["lizard", "paper", "rock", "scissors", "spock"];
     for(i=0;i<5;i++)
     {
         var rand=Math.floor(Math.random() * arrayImgs.length);
         var text=arrayImgs[rand];
 
-        var img1=$('<img/>',{id:"img"+i, fitxa:text, class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/"+text+".png", alt: text});
-        img1.draggable(
+        var img15=$('<img/>',{id:"img"+i, fitxa:text, class:'imgJocPPT imgJocPPTJo ppt', src:"/javascripts/games/pedrapapertisores/"+text+".png", alt: text});
+        img15.draggable(
         {
             revert:'invalid',
             helper: 'clone',
             opacity: 0.5
         });
-        divPecesJo.append(img1);
+        divPecesJo.append(img15);
         arrayImgs=$.grep(arrayImgs, function(value) {
             return value != text;
         });
-        var img2=$('<img/>',{id:"imgEnem"+i, fitxa:i, class:'imgJocPPT imgJocPPTEnem', src:'/javascripts/games/pedrapapertisores/interrogant.png' ,alt: 'interrogant'});
-        divPecesEnemig.append(img2);
+        var img25=$('<img/>',{id:"imgEnem"+i, fitxa:i, class:'imgJocPPT imgJocPPTEnem ppt', src:'/javascripts/games/pedrapapertisores/interrogant.png' ,alt: 'interrogant'});
+        divPecesEnemig.append(img25);
     }
 
     divContent.append(divPecesEnemig);
@@ -59,24 +63,28 @@ $(function() {
 
     div.append(divHeader);
     div.append(divContent);
-    var imgHelp="<img class='imgJoc' src = '/javascripts/games/pedrapapertisores/how-to-play-rock-paper-scissors-spock.jpg' alt = 'HOW TO' />";
+    var imgHelp="<img class='imgJoc ppt' src = '/javascripts/games/pedrapapertisores/how-to-play-rock-paper-scissors-spock.jpg' alt = 'HOW TO' />";
     $('#boardContent').append(div);
     socket.on('Jugada',function(jugada){
-        var jugada1=JSON.parse(jugada);
+        console.log("jugadaEnemic12:"+jugada)
+        var jugada2=JSON.parse(jugada);
+        jugadaEnemic=jugada2.jugada;
+        console.log("jugadaMeva:"+jugadaMeva)
        if(jugadaMeva != undefined)
        {
-           var imgEnem=$('<img/>',{id:"imgEnemic", fitxa:jugada1.jugada, class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/"+jugada1.jugada+".png", alt: jugada1.jugada});
+           var imgEnem7=$('<img/>',{id:"imgEnemic", fitxa:jugadaEnemic, class:'imgJocPPT imgJocPPTEnemic ppt', src:"/javascripts/games/pedrapapertisores/"+jugadaEnemic+".png", alt:jugadaEnemic});
+           console.log("jugadaEnemic:"+jugadaEnemic)
            $('#pptDestiEnemic').empty();
-           $('#pptDestiEnemic').append(imgEnem);
-           var resultat=$('<div/>',{id:'resultatPPT'});
-           var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
+           $('#pptDestiEnemic').append(imgEnem7);
+           var resultat=$('<div/>',{id:'resultatPPT', class:'ppt'});
+           var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn ppt"});
            botoTancar.append("Tancar joc");
            botoTancar.click(function()
            {
                $('#resultatPPT').remove() ;
                $('#boardContent').empty();
            });
-           var botoTornar=$('<a/>',{id:"botoTornarPPT",class:"btn"});
+           var botoTornar=$('<a/>',{id:"botoTornarPPT",class:"btn ppt"});
            botoTornar.append("Tornar a jugar");
            botoTornar.click(function()
            {
@@ -84,81 +92,79 @@ $(function() {
                $('#boardContent').empty();
                socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
            });
-           jugadaEnemic=jugada1.jugada;
            var result=heGuanyat(jugadaMeva,jugadaEnemic);
            if(result===0)
            {
-               var img1=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
-               resultat.append(img1);
+               var img3=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT ppt', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
+               resultat.append(img3);
            }else if(result===1)
            {
-               var img1=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
-               resultat.append(img1);
+               var img3=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT ppt', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
+               resultat.append(img3);
            } else if(result===2)
            {
-               var img1=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
-               resultat.append(img1);
+               var img3=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT ppt', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
+               resultat.append(img3);
            }
            resultat.append(botoTancar);
            resultat.append(botoTornar);
-           jugadaEnemic=undefined;
-           jugadaMeva=undefined;
            $(document.body).append(resultat);
        }else
        {
-           jugadaEnemic=jugada1.jugada;
-           var imgEnem=$('<img/>',{id:"imgEnemic", fitxa:'interrogant', class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/interrogant.png", alt: 'interrogant'});
+           var imgEnem6=$('<img/>',{id:"imgEnemic23", fitxa:'interrogant', class:'imgJocPPT imgJocPPTEnemic ppt', src:"/javascripts/games/pedrapapertisores/interrogant.png", alt: 'interrogant'});
            $('#pptDestiEnemic').empty();
-           $('#pptDestiEnemic').append(imgEnem);
+           $('#pptDestiEnemic').append(imgEnem6);
        }
     });
 });
 function handle_drop_patient(event, ui) {
-    $(ui.draggable).addClass("ui-state-selected");
-    $('#pptDestiJo').empty();
-    $('#pptDestiJo').append(ui.draggable.clone());
-    jugadaMeva=ui.draggable.attr('fitxa');
-    socket.emit("Jugada",'{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'","jugada":"'+ui.draggable.attr('fitxa')+'"}');
-    if(jugadaEnemic != undefined)
+    if(jugadaMeva===undefined)
     {
-        var imgEnem=$('<img/>',{id:"imgEnemic", fitxa:jugadaEnemic, class:'imgJocPPT imgJocPPTJo', src:"/javascripts/games/pedrapapertisores/"+jugadaEnemic+".png", alt: jugadaEnemic});
-        $('#pptDestiEnemic').empty();
-        $('#pptDestiEnemic').append(imgEnem);
-        var resultat=$('<div/>',{id:'resultatPPT'});
-        var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn"});
-        botoTancar.append("Tancar joc");
-        botoTancar.click(function()
+        $(ui.draggable).addClass("ui-state-selected");
+        $('#pptDestiJo').empty();
+        $('#pptDestiJo').append(ui.draggable.clone());
+        jugadaMeva=ui.draggable.attr('fitxa');
+        console.log("jugadaMeva:"+jugadaMeva);
+        socket.emit("Jugada",'{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'","jugada":"'+ui.draggable.attr('fitxa')+'"}');
+        if(jugadaEnemic != undefined)
         {
-            $('#resultatPPT').remove() ;
-            $('#boardContent').empty();
-        });
-        var botoTornar=$('<a/>',{id:"botoTornarPPT",class:"btn"});
-        botoTornar.append("Tornar a jugar");
-        botoTornar.click(function()
-        {
-            $('#resultatPPT').remove();
-            $('#boardContent').empty();
-            $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR){});
-        });
-        var result=heGuanyat(jugadaMeva,jugadaEnemic);
-        if(result===0)
-        {
-            var img1=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
-            resultat.append(img1);
-        }else if(result===1)
-        {
-            var img1=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
-            resultat.append(img1);
-        } else if(result===2)
-        {
-            var img1=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
-            resultat.append(img1);
+            var imgEnem5=$('<img/>',{id:"imgEnemic2", fitxa:jugadaEnemic, class:'imgJocPPT imgJocPPTEnemic ppt', src:"/javascripts/games/pedrapapertisores/"+jugadaEnemic+".png", alt: jugadaEnemic});
+            $('#pptDestiEnemic').empty();
+            $('#pptDestiEnemic').append(imgEnem5);
+            var resultat=$('<div/>',{id:'resultatPPT', class:'ppt'});
+            var botoTancar=$('<a/>',{id:"botoTancarPPT",class:"btn ppt"});
+            botoTancar.append("Tancar joc");
+            botoTancar.click(function()
+            {
+                $('#resultatPPT').remove() ;
+                $('#boardContent').empty();
+            });
+            var botoTornar=$('<a/>',{id:"botoTornarPPT",class:"btn ppt"});
+            botoTornar.append("Tornar a jugar");
+            botoTornar.click(function()
+            {
+                $('#resultatPPT').remove();
+                $('#boardContent').empty();
+                socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
+            });
+            var result=heGuanyat(jugadaMeva,jugadaEnemic);
+            if(result===0)
+            {
+                var img2=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT ppt', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
+                resultat.append(img2);
+            }else if(result===1)
+            {
+                var img2=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT ppt', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
+                resultat.append(img2);
+            } else if(result===2)
+            {
+                var img2=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT ppt', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
+                resultat.append(img2);
+            }
+            resultat.append(botoTancar);
+            resultat.append(botoTornar);
+            $(document.body).append(resultat);
         }
-        resultat.append(botoTancar);
-        resultat.append(botoTornar);
-        jugadaEnemic=undefined;
-        jugadaMeva=undefined;
-        $(document.body).append(resultat);
     }
 }
 function heGuanyat(meva,seva)
