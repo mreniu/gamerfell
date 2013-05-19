@@ -8,6 +8,9 @@
 var jugadaMeva;
 var jugadaEnemic;
 $(function() {
+    jugadaMeva=undefined;
+    jugadaEnemic=undefined;
+    var jugadaEnemic;
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
@@ -82,19 +85,22 @@ $(function() {
                $('#boardContent').empty();
                socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
            });
-           if(heGuanyat(jugadaMeva,jugada1.fitxa))
+           var result=heGuanyat(jugadaMeva,jugadaEnemic);
+           if(result===0)
            {
                var img1=$('<img/>',{id:"guanyatPPT", class:'imgResultatPPT imgGuanyatPPT', src:"/javascripts/games/pedrapapertisores/youwin.png", alt: "GUANYAT"});
                resultat.append(img1);
-               resultat.append(botoTancar);
-               resultat.append(botoTornar);
-          }else
+           }else if(result===1)
            {
                var img1=$('<img/>',{id:"perdutPPT", class:'imgResultatPPT imgPerdutPPT', src:"/javascripts/games/pedrapapertisores/youlose.png", alt: "PERDUT"});
                resultat.append(img1);
-               resultat.append(botoTancar);
-               resultat.append(botoTornar);
+           } else if(result===2)
+           {
+               var img1=$('<img/>',{id:"empatPPT", class:'imgResultatPPT imgEmpatPPT', src:"/javascripts/games/pedrapapertisores/empat.png", alt: "Empat"});
+               resultat.append(img1);
            }
+           resultat.append(botoTancar);
+           resultat.append(botoTornar);
            jugadaEnemic=undefined;
            jugadaMeva=undefined;
            $(document.body).append(resultat);
@@ -150,6 +156,8 @@ function handle_drop_patient(event, ui) {
         }
         resultat.append(botoTancar);
         resultat.append(botoTornar);
+        jugadaEnemic=undefined;
+        jugadaMeva=undefined;
         $(document.body).append(resultat);
     }
 }

@@ -31,7 +31,7 @@ $(function() {
                     {
                         jocSel=$(this).attr('joc');
                         jugadorSel=$(this).attr('user');
-                        var str="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                        var str="Peticions("+ peticionsCookie.length+")<span class='caret'></span>";
                         $('#botoPeticions').empty();
                         $('#botoPeticions').append(str);
                         $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
@@ -42,16 +42,27 @@ $(function() {
                             {
                                 var peticions=JSON.parse($.cookie("peticions"));
 
-                                findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie("id_user")+'","jocId":"'+jocSel+'"}')) ;
+                                findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie("id_user")+'","jocId":"'+jocSel+'"}'),function()
+                                {
+                                    if(peticions!=undefined)
+                                    {
+                                        $.cookie("peticions",JSON.stringify(peticions));
+                                        var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
+                                        $('#botoPeticions').empty();
+                                        $('#botoPeticions').append(string2);
+                                    }else
+                                    {
+                                        var string2="Peticions(0)<span class='caret'></span>";
+                                        $('#botoPeticions').empty();
+                                        $('#botoPeticions').append(string2);
+                                    }
+                                }) ;
                             }
-                            $.cookie("peticions",JSON.stringify(peticions));
-                            var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
-                            $('#botoPeticions').empty();
-                            $('#botoPeticions').append(string2);
+
                         });
                     });
                     $('#llistaPeticions').append(li);
-                    var string2="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                    var string2="Peticions("+ peticionsCookie.length+")<span class='caret'></span>";
                     $('#botoPeticions').empty();
                     $('#botoPeticions').append(string2);
                 }
@@ -113,20 +124,27 @@ function handle_drop_patient(event, ui) {
         $('#boardContent').append(divJoc);
     }
     //$(ui.draggable).remove();
-    if(jocSel != '' && jugadorSel !='' && false)
+    if(jocSel != '' && jugadorSel !='')
     {
         alert("Enviar petició?");
-        if(socket==='')
+        var botoPeticio=$('<a/>',{id:"botoPeticioPPT",class:"btn"});
+        botoPeticio.append("Enviar petició de jugar!");
+        botoPeticio.click(function()
         {
-            connect(function(userId1,userId2,jocId){
-                socket.emit('peticioJugar','{"myId":"'+userId1+'","hisId":"'+userId2+'","jocId":"'+jocId+'"}');
-            });
-       }
-        else
-        {
-            socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
-            alert("NO FALTA CONNECTAR?");
-        }
+            if(socket==='')
+            {
+                connect(function(userId1,userId2,jocId){
+                    socket.emit('peticioJugar','{"myId":"'+userId1+'","hisId":"'+userId2+'","jocId":"'+jocId+'"}');
+                });
+            }
+            else
+            {
+                socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
+            }
+            $('#boardContent').append("<div class='avisPeticio'>Petició enviada!</div>") ;
+        });
+        $('#boardContent').append(botoPeticio);
+
     }
 }
 
@@ -177,27 +195,36 @@ function connect(callback) {
                 {
                     jocSel=$(this).attr('joc');
                     jugadorSel=$(this).attr('user');
-                    var str="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
-                    $('#botoPeticions').empty();
-                    $('#botoPeticions').append(str);
                     $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
                     {
                         socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
                         li.remove();
+                        var peticions;
                         if($.cookie("peticions")!=undefined)
                         {
-                            var peticions=JSON.parse($.cookie("peticions"));
+                            peticions=JSON.parse($.cookie("peticions"));
 
-                            var index=findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie('id_user')+'","jocId":"'+jocSel+'"}'));
+                            var index=findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie('id_user')+'","jocId":"'+jocSel+'"}'),function(){
+                                if(peticions !=undefined)
+                                {
+                                    $.cookie("peticions", JSON.stringify(peticions));
+                                    var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
+                                    $('#botoPeticions').empty();
+                                    $('#botoPeticions').append(string2);
+                                }else
+                                {
+                                    var string2="Peticions(0)<span class='caret'></span>";
+                                    $('#botoPeticions').empty();
+                                    $('#botoPeticions').append(string2);
+                                }
+                            });
+
                         }
-                        $.cookie("peticions", JSON.stringify(peticions));
-                        var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
-                        $('#botoPeticions').empty();
-                        $('#botoPeticions').append(string2);
+
                     });
                 });
                 $('#llistaPeticions').append(li);
-                var string2="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
                 $('#botoPeticions').empty();
                 $('#botoPeticions').append(string2);
             } else {
@@ -389,13 +416,16 @@ function showChat(userID) {
     $('#chat_'+userID).slideToggle('slow');
 }
 
-function findAndRemove(array, valor) {
+function findAndRemove(array, valor,callback) {
     $.each(array, function(index, result) {
 
-        if(result.myId === valor.myId && result.hisId === valor.hisId && result.gameId === valor.gameId) {
+        if(result!=undefined && result.myId === valor.myId && result.hisId === valor.hisId && result.gameId === valor.gameId) {
             //Remove from array
             array.splice(index, 1);
             console.log("ELIMINAT DE COOKIE inde:"+index+"!");
+            if(callback!=undefined)
+                callback();
+            return false;
         }
     });
 }
