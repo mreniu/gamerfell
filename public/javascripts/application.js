@@ -1,12 +1,13 @@
 $(function() {
-    if($.cookie('id_user')!=undefined)
-        connect();
     //var var1=0;
     //var var2=0;
     socket='';
     jocSel= '';
     jugadorSel='';
     nomJocSel='';
+    if($.cookie('id_user')!=undefined)
+        connect();
+
     /*$("#botoProva1").click(function () {
         var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>user"+var1+"</div><div class='desc'>desc desc</div></div>"
         var div=$('<div/>',{id:'user'+var1,class:'friend ui-widget-content draggable'}).append( string )
@@ -120,6 +121,9 @@ function connect(callback) {
                     {
                         socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
                         li.remove();
+                        var string2="Peticions("+ $('#llistaPeticions').length+")<span class='caret'></span>";
+                        $('#botoPeticions').empty();
+                        $('#botoPeticions').append(string2);
                     });
                 });
                 $('#llistaPeticions').append(li);

@@ -99,7 +99,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             {
                 usersConn.splice(index, 1);
                 var sock=sockets[index];
-                sock.close();
+                sock.disconnect();
                 sockets.splice(index, 1);
             }
             usersConn.push(idUser);
@@ -124,9 +124,21 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 if(result>0)
                 {
                     var index=usersConn.indexOf(peticioObj.hisId);
-                    socket2=sockets[index];
-                    socket2.emit('peticioJugar',peticio);
-                    console.log('Peticio reenviada a:'+peticioObj.hisId);
+                    if(index>=0)
+                    {
+                        socket2=sockets[index];
+                        if(socket2!=undefined)
+                        {
+                            socket2.emit('peticioJugar',peticio);
+                            console.log('Peticio reenviada a:'+peticioObj.hisId);
+                        } else
+                        {
+                            console.log("Socket undefined:"+peticioObj.hisId);
+                        }
+                    }else
+                    {
+                        console.log("Usuari no connectat:"+peticioObj.hisId);
+                    }
                 }else
                 {
                     console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
@@ -178,7 +190,7 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 function existFriendship(idUser1,idUser2,callback)
 {
     db.collection('friendships', function(err, collection) {
-        collection.find({USERID:idUser1,USERID2:idUser2}).count(function(err, count) {
+        collection.find({$or:[{USERID:idUser1,USERID2:idUser2},{USERID:idUser2,USERID2:idUser1}]}).count(function(err, count) {
             console.log('existeix:count?:'+count);
             callback(count);
         });
