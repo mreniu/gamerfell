@@ -27,33 +27,49 @@ exports.addFriend = function(req, res) {
                     res.send({'error': 'No et pots fer amic a tu mateix (FOREVER ALONE: lvl 9999)'});
                 } else {
                     db.collection('friendships', function(err, collection) {
-                       collection.findOne({$or: [{USERID: req.body.id_user,USERID2: user_friend},{USERID: req.body.id_friend,USERID2: req.body.id_user}]}, function (err, result){
-                           if (result != null) {
-                               console.log('FRIEND: '+ req.body.id_friend);
-                               res.send({'error': 'Ja existeix una amistat amb aquest usuari'});
-                           } else {
-                               var friends = {
-                                   USERID: req.body.id_user,
-                                   USERID2: user_friend.USERID
-                               };
-                               db.collection('friendships', function(err, collection) {
-                                   collection.insert(friends, {safe:true}, function(err, result) {
-                                       if (err) {
-                                           res.send({'error':'An error has occurred'});
-                                       } else {
-                                           console.log('Success: ' + JSON.stringify(result[0]));
-                                           res.send({'success': 'Amic afegit correctament', 'friend': user_friend});
-                                       }
-                                   });
-                               });
-                           }
-                       });
+                        console.log('USER: '+req.body.id_user+' FRIEND: '+user_friend.USERID);
+                        collection.findOne({$or: [{USERID: req.body.id_user,USERID2: user_friend.USERID},{USERID: user_friend.USERID, USERID2: req.body.id_user}]}, function (err, result){
+                            if (result != null) {
+                                console.log('FRIEND: '+ req.body.id_friend);
+                                res.send({'error': 'Ja existeix una amistat amb aquest usuari'});
+                            } else {
+                                var friends = {
+                                    USERID: req.body.id_user,
+                                    USERID2: user_friend.USERID
+                                };
+                                db.collection('friendships', function(err, collection) {
+                                    collection.insert(friends, {safe:true}, function(err, result) {
+                                        if (err) {
+                                            res.send({'error':'An error has occurred'});
+                                        } else {
+                                            console.log('Success: ' + JSON.stringify(result[0]));
+                                            res.send({'success': 'Amic afegit correctament', 'friend': user_friend});
+                                        }
+                                    });
+                                });
+                            }
+                        });
                     });
                 }
             }
         });
     });
 }
+
+exports.findFriends = function(req,res) {
+    db.collection('friendships', function(err, collection){
+        collection.find({$or: [{USERID: req.body.id_user},{USERID2: req.body.id_user}]}).toArray(function(err, items){
+            if (err) {
+                console.log('ERROR: '+error);
+            } else {
+                res.send({'friends': items});
+            }
+        });
+    })
+}
+
+
+
 /*---------------------------------------------------*/
 /*             INITIALIZING DATABASE                 */
 /*---------------------------------------------------*/

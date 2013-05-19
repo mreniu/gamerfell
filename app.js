@@ -62,6 +62,7 @@ app.get('/games', game.findAll);
 
 app.get('/friendships', friendship.findAll);
 app.post('/friendships', friendship.addFriend);
+app.post('/friendships/findfriends', friendship.findFriends);
 
 app.get('/users', user.findAll);
 app.get('/users/:id', user.findById);

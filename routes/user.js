@@ -9,8 +9,8 @@ exports.list = function(req, res){
 
 
 exports.findById = function(req, res) {
-    var id = req.params.id;
-    console.log('Retrieving user: ' + id);
+    var id = req.query.id;
+    console.log('SEARCHING USER: ' + id);
     db.collection('users', function(err, collection) {
         collection.findOne({'USERID': id}, function(err, item) {
             console.log("ITEM: "+item);

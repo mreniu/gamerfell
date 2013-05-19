@@ -38,6 +38,18 @@ exports.populateDB = function() {
             DESCRIPTION: "Pedra, paper, tisores de tota la vida...",
             NPlayers: "2",
             GAMEPATH: "games/pedrapapertisores/pedrapapertisores.js"
+        },{
+            GAMEID: "game2",
+            NAME: "Pedra-Paper-Tisores2",
+            DESCRIPTION: "Pedra, paper, tisores de tota la vida...",
+            NPlayers: "2",
+            GAMEPATH: "games/pedrapapertisores/pedrapapertisores.js"
+        },{
+            GAMEID: "game3",
+            NAME: "Pedra-Paper-Tisores3",
+            DESCRIPTION: "Pedra, paper, tisores de tota la vida...",
+            NPlayers: "2",
+            GAMEPATH: "games/pedrapapertisores/pedrapapertisores.js"
         }];
 
 

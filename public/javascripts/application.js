@@ -1,13 +1,13 @@
 $(function() {
     if($.cookie('id_user')!=undefined)
         connect();
-    var var1=0;
-    var var2=0;
+    //var var1=0;
+    //var var2=0;
     socket='';
     jocSel= '';
     jugadorSel='';
     nomJocSel='';
-    $("#botoProva1").click(function () {
+    /*$("#botoProva1").click(function () {
         var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>user"+var1+"</div><div class='desc'>desc desc</div></div>"
         var div=$('<div/>',{id:'user'+var1,class:'friend ui-widget-content draggable'}).append( string )
         div.draggable(
@@ -18,10 +18,10 @@ $(function() {
         });
         $("#friendsList").append(div);
         var1=var1+1;
-    });
+    });*/
 
 
-    $("#botoProva2").click(function () {
+    /*$("#botoProva2").click(function () {
         var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>game"+var2+"</div><div class='desc'>WIN: 0 LOSE:999</div></div>"
         var div2=$('<div/>',{id:'game'+var2,class:'game ui-widget-content draggable'}).append( string )
         div2.draggable(
@@ -33,17 +33,18 @@ $(function() {
         $("#gamesList").append(div2);
         var2=var2+1;
         //####PROVA SOCKET###
-        /*connect(function(userId1,userId2,jocId){
-            socket.emit('peticioJugar',"{'myId':"+userId1+",'hisId':"+userId2+",'jocId:"+jocId+"}");
-        });*/
+        //connect(function(userId1,userId2,jocId){
+        //    socket.emit('peticioJugar',"{'myId':"+userId1+",'hisId':"+userId2+",'jocId:"+jocId+"}");
+        //});
         //##################
-    });
+    });*/
 
     $('#boardContent').droppable({
         accept: ".friend,.game",
         hoverClass: 'hoverDrop',
         drop: handle_drop_patient
     });
+
 });
 function handle_drop_patient(event, ui) {
     $(ui.draggable).addClass("ui-state-selected");
@@ -166,6 +167,8 @@ $(document).ready(function(){
                     window.location.href = "/";
                 } else {
                     uploadUser(data.id);
+                    getGameList();
+                    getFriendList();
                 }
                 connect();
             } else {
@@ -183,6 +186,8 @@ $(document).ready(function(){
 $(function(){
     if ($.cookie('id_user') != undefined){
         uploadUser($.cookie('id_user'));
+        getGameList();
+        getFriendList();
         $('#user').css('display','');
     } else {
         $('#login').css('display','');
@@ -202,7 +207,7 @@ function uploadUser(userID){
     });
 }
 
-/******    ADD FRIEND      ******/
+/******    FRIENDS      ******/
 $(document).ready(function(){
     $('#botoAddFriend').click(function(){
         console.log('Adding user');
@@ -216,10 +221,83 @@ $(document).ready(function(){
                 alert('ERROR: '+ data.error);
             } else {
                 alert(data.success);
-                alert("AMIC: "+ data.friend);
+                addFriendToList(data.friend);
                 $('#addFriendHere input#friend_username').val('');
                 $('#addFriendPanel').hide();
             }
         });
     });
 });
+
+function getFriendList(){
+    $.ajax({
+        type: 'POST',
+        url: '/friendships/findfriends',
+        data: {'id_user': $.cookie('id_user')}
+    }).done(function(data){
+        $.each(data.friends, function(index, value){
+            addFriendToListWithSearch(value);
+        })
+    });
+};
+
+function addFriendToList(friend) {
+    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+friend.user+"</div><div class='desc'>desc desc</div></div>"
+    var div=$('<div/>',{id: friend.USERID,class:'friend ui-widget-content draggable'}).append( string )
+    div.draggable(
+        {
+            revert:'invalid',
+            helper: 'clone',
+            opacity: 0.5
+        });
+    $("#friendsList").append(div);
+};
+
+function addFriendToListWithSearch(friend){
+    var id_friend;
+    if (friend.USERID == $.cookie('id_user')) {
+        id_friend = friend.USERID2;
+    } else { id_friend = friend.USERID; }
+    console.log('FRIEND: '+id_friend);
+    $.ajax({
+        type: 'GET',
+        url: '/users/:id',
+        data: {'id': id_friend},
+        dataType: 'json'
+    }).done(function(data){
+            var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+data.user+"</div><div class='desc'>desc desc</div></div>"
+            var div=$('<div/>',{id: data.USERID,class:'friend ui-widget-content draggable'}).append( string )
+            div.draggable(
+                {
+                    revert:'invalid',
+                    helper: 'clone',
+                    opacity: 0.5
+                });
+            $("#friendsList").append(div);
+    });
+}
+
+/******    GAMES      ******/
+function getGameList(){
+    $.ajax({
+        type: 'GET',
+        url: '/games'
+    }).done(function(data){
+            $.each(data, function(index, value){
+                addGameToList(value);
+            })
+        });
+};
+
+function addGameToList(game) {
+    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='text'><div class='title'>"+game.NAME+"</div><div class='desc'>WIN: 0 LOSE:999</div></div>"
+    var div=$('<div/>',{id: game.GAMEID,class:'game ui-widget-content draggable'}).append( string )
+    div.draggable(
+        {
+            revert:'invalid',
+            helper: 'clone',
+            opacity: 0.5
+        });
+    $("#gamesList").append(div);
+};
+
