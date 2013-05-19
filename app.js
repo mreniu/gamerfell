@@ -8,6 +8,8 @@ var express = require('express')
   , user = require('./routes/user')
   , game = require('./routes/game')
   , friendship = require('./routes/friendship')
+  , match = require('./routes/match')
+  , player= require('./routes/player')
   , http = require('http')
   , path = require('path');
 
@@ -29,6 +31,8 @@ db.open(function(err, db) {
                 user.populateDB();
                 game.populateDB();
                 friendship.populateDB();
+                match.populateDB();
+                player.populateDB();
             }
         });
     }
@@ -59,6 +63,14 @@ app.get('/signup', routes.signup);
 
 app.post('/games', game.findById);
 app.get('/games', game.findAll);
+
+app.get('/matchs', match.findAll);
+app.post('/matchs', match.addMatch);
+app.put('/matchs', match.updateMatchWinner);
+
+app.get('/players', player.findAll);
+app.post('/players', player.addPlayer);
+
 
 app.get('/friendships', friendship.findAll);
 app.post('/friendships', friendship.addFriend);

@@ -5,6 +5,7 @@ $(function() {
     jocSel= '';
     jugadorSel='';
     nomJocSel='';
+    matchId=undefined;
     var peticions;
     if($.cookie('id_user')!=undefined)
         connect();
@@ -25,46 +26,48 @@ $(function() {
                     console.log('SUCCES: ' + data);
                     nomJoc=data.NAME;
                     var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
-                    var string= "<a href='#'><strong>"+peticioObj.myId+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
-                    li.append(string);
-                    li.click(function()
-                    {
-                        jocSel=$(this).attr('joc');
-                        jugadorSel=$(this).attr('user');
-                        var str="Peticions("+ peticionsCookie.length+")<span class='caret'></span>";
-                        $('#botoPeticions').empty();
-                        $('#botoPeticions').append(str);
-                        $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
+                   getNomByUserId(peticioObj.myId, function(nomJugador){
+                        var string= "<a href='#'><strong>"+nomJugador+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
+                        li.append(string);
+                        li.click(function()
                         {
-                            socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
-                            li.remove();
-                            if($.cookie("peticions")!=undefined)
+                            jocSel=$(this).attr('joc');
+                            jugadorSel=$(this).attr('user');
+                            var str="Peticions("+ peticionsCookie.length+")<span class='caret'></span>";
+                            $('#botoPeticions').empty();
+                            $('#botoPeticions').append(str);
+                            $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
                             {
-                                var peticions=JSON.parse($.cookie("peticions"));
-
-                                findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie("id_user")+'","jocId":"'+jocSel+'"}'),function()
+                                socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
+                                li.remove();
+                                if($.cookie("peticions")!=undefined)
                                 {
-                                    if(peticions!=undefined)
-                                    {
-                                        $.cookie("peticions",JSON.stringify(peticions));
-                                        var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
-                                        $('#botoPeticions').empty();
-                                        $('#botoPeticions').append(string2);
-                                    }else
-                                    {
-                                        var string2="Peticions(0)<span class='caret'></span>";
-                                        $('#botoPeticions').empty();
-                                        $('#botoPeticions').append(string2);
-                                    }
-                                }) ;
-                            }
+                                    var peticions=JSON.parse($.cookie("peticions"));
 
+                                    findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie("id_user")+'","jocId":"'+jocSel+'"}'),function()
+                                    {
+                                        if(peticions!=undefined)
+                                        {
+                                            $.cookie("peticions",JSON.stringify(peticions));
+                                            var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
+                                            $('#botoPeticions').empty();
+                                            $('#botoPeticions').append(string2);
+                                        }else
+                                        {
+                                            var string2="Peticions(0)<span class='caret'></span>";
+                                            $('#botoPeticions').empty();
+                                            $('#botoPeticions').append(string2);
+                                        }
+                                    }) ;
+                                }
+
+                            });
                         });
-                    });
-                    $('#llistaPeticions').append(li);
-                    var string2="Peticions("+ peticionsCookie.length+")<span class='caret'></span>";
-                    $('#botoPeticions').empty();
-                    $('#botoPeticions').append(string2);
+                        $('#llistaPeticions').append(li);
+                        var string2="Peticions("+ peticionsCookie.length+")<span class='caret'></span>";
+                        $('#botoPeticions').empty();
+                        $('#botoPeticions').append(string2);
+                   });
                 }
             });
         }
@@ -169,68 +172,71 @@ function connect(callback) {
         //demanar a usuari si vol jugar
         var peticioObj=JSON.parse(peticio);
         var nomJoc='';
-        $.ajax({
-            type: 'POST',
-            url: '/games',
-            data: 'gameid='+peticioObj.jocId
-        }).done(function(data){
-            if (data.error == undefined) {
-                console.log('SUCCES: ' + data);
-                nomJoc=data.NAME;
-                if($.cookie("peticions")===undefined)
-                {
-                    peticions=[];
-                    peticions.push(peticioObj);
-                }
-                else
-                {
-                    peticions=JSON.parse($.cookie("peticions"));
-                    peticions.push(peticioObj);
-                }
-                $.cookie("peticions", JSON.stringify(peticions));
-                var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
-                var string= "<a href='#'><strong>"+peticioObj.myId+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
-                li.append(string);
-                li.click(function()
-                {
-                    jocSel=$(this).attr('joc');
-                    jugadorSel=$(this).attr('user');
-                    $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
+        getNomByUserId(peticioObj.myId,function(nomJugador){
+
+            $.ajax({
+                type: 'POST',
+                url: '/games',
+                data: 'gameid='+peticioObj.jocId
+            }).done(function(data){
+                if (data.error == undefined) {
+                    console.log('SUCCES: ' + data);
+                    nomJoc=data.NAME;
+                    if($.cookie("peticions")===undefined)
                     {
-                        socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
-                        li.remove();
-                        var peticions;
-                        if($.cookie("peticions")!=undefined)
+                        peticions=[];
+                        peticions.push(peticioObj);
+                    }
+                    else
+                    {
+                        peticions=JSON.parse($.cookie("peticions"));
+                        peticions.push(peticioObj);
+                    }
+                    $.cookie("peticions", JSON.stringify(peticions));
+                    var li=$('<li/>',{id:"li_"+peticioObj.myId+"_"+peticioObj.jocId, user:peticioObj.myId,joc:peticioObj.jocId,nomjoc:nomJoc, class:'game ui-widget-content draggable'})
+                    var string= "<a href='#'><strong>"+nomJugador+"</strong> vol jugar a <strong>"+nomJoc+"</strong></a>";
+                    li.append(string);
+                    li.click(function()
+                    {
+                        jocSel=$(this).attr('joc');
+                        jugadorSel=$(this).attr('user');
+                        $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
                         {
-                            peticions=JSON.parse($.cookie("peticions"));
+                            socket.emit('acceptarJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
+                            li.remove();
+                            var peticions;
+                            if($.cookie("peticions")!=undefined)
+                            {
+                                peticions=JSON.parse($.cookie("peticions"));
 
-                            var index=findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie('id_user')+'","jocId":"'+jocSel+'"}'),function(){
-                                if(peticions !=undefined)
-                                {
-                                    $.cookie("peticions", JSON.stringify(peticions));
-                                    var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
-                                    $('#botoPeticions').empty();
-                                    $('#botoPeticions').append(string2);
-                                }else
-                                {
-                                    var string2="Peticions(0)<span class='caret'></span>";
-                                    $('#botoPeticions').empty();
-                                    $('#botoPeticions').append(string2);
-                                }
-                            });
+                                var index=findAndRemove(peticions,JSON.parse('{"myId":"'+jugadorSel+'","hisId":"'+$.cookie('id_user')+'","jocId":"'+jocSel+'"}'),function(){
+                                    if(peticions !=undefined)
+                                    {
+                                        $.cookie("peticions", JSON.stringify(peticions));
+                                        var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
+                                        $('#botoPeticions').empty();
+                                        $('#botoPeticions').append(string2);
+                                    }else
+                                    {
+                                        var string2="Peticions(0)<span class='caret'></span>";
+                                        $('#botoPeticions').empty();
+                                        $('#botoPeticions').append(string2);
+                                    }
+                                });
 
-                        }
+                            }
 
+                        });
                     });
-                });
-                $('#llistaPeticions').append(li);
-                var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
-                $('#botoPeticions').empty();
-                $('#botoPeticions').append(string2);
-            } else {
-                alert('ERROR: '+ data.error);
-                console.log('ERROR: '+ data.error);
-            }
+                    $('#llistaPeticions').append(li);
+                    var string2="Peticions("+ peticions.length+")<span class='caret'></span>";
+                    $('#botoPeticions').empty();
+                    $('#botoPeticions').append(string2);
+                } else {
+                    alert('ERROR: '+ data.error);
+                    console.log('ERROR: '+ data.error);
+                }
+            });
         });
     });
     socket.on('acceptarJugar',function(data)
@@ -238,6 +244,7 @@ function connect(callback) {
         var accept=JSON.parse(data);
         jugadorSel=accept.myId;
         jocSel=accept.jocId;
+        crearPartida($.cookie('id_user'),jugadorSel,jocSel);
         $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
         {});
     });
@@ -381,7 +388,17 @@ function addFriendToListWithSearch(friend){
             $(div).after(chat_div);
     });
 }
-
+function getNomByUserId(userId,callback)
+{
+    $.ajax({
+        type: 'GET',
+        url: '/users/:id',
+        data: {'id': userId},
+        dataType: 'json'
+    }).done(function(data){
+         callback(data.user);
+    });
+}
 /******    GAMES      ******/
 function getGameList(){
     $.ajax({
@@ -426,6 +443,56 @@ function findAndRemove(array, valor,callback) {
             if(callback!=undefined)
                 callback();
             return false;
+        }
+    });
+}
+
+function guardarResultatPartida(playerId,matchid,gameId)
+{
+    $.ajax({
+        type: 'PUT',
+        url: '/matchs',
+        data: 'MATCHID='+matchid+'GAMEID='+gameid+'&STATE=1&WINNER='+playerId
+    });
+}
+
+function crearPartida(user1,user2,gameid)
+{
+    $.ajax({
+        type: 'POST',
+        url: '/matchs',
+        data: 'GAMEID='+gameid+'&STATE=0&WINNER=""'
+    }).done(function(match_id){
+        if (match_id.error != undefined){
+            console.log('ERROR: '+ match_id.error);
+        }else
+        {
+            matchId=match_id;
+            console.log("###MATCHID="+matchId);
+            $.ajax({
+                type: 'POST',
+                url: '/players',
+                data: 'MATCHID='+match_id+'&USERID='+user1+'&SCORE=""'
+            }).done(function(player_id1){
+                if (player_id1.error != undefined){
+                    console.log('ERROR: '+ player_id1.error);
+                }else
+                {
+                    playerId1=player_id1;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/players',
+                        data: 'MATCHID='+match_id+'&USERID='+user2+'&SCORE=""'
+                    }).done(function(player_id2){
+                        if (player_id2.error != undefined){
+                            console.log('ERROR: '+ player_id2.error);
+                        }else
+                        {
+                            playerId2=player_id2;
+                        }
+                    });
+                }
+            });
         }
     });
 }

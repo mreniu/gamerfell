@@ -19,7 +19,6 @@ $(function() {
     $('#boardContent').empty();
     var div=$('<div/>',{id:'pedrapapertisoresPanel', class:'ppt'});
     var divHeader=$('<div/>',{id:'pptHeader',class:'gameHeader ppt'});
-    divHeader.append("Estas jugant a <strong>Pedra-Paper-Tisores-Llangardaix-Spock</strong> contra <strong> jugadorSel </strong>");
     var divContent=$('<div/>',{id:'pptContent',class:'gameContent ppt'});
     var divPecesEnemig=$('<div/>',{id:'pptPecesEnemic',class:'pptPeces ppt'});
     var divDestiEnemig=$('<div/>',{id:'pptDestiEnemic',class:'pptDesti ppt'});
@@ -67,6 +66,7 @@ $(function() {
     div.append(divContent);
     var imgHelp="<img class='imgJoc ppt' src = '/javascripts/games/pedrapapertisores/how-to-play-rock-paper-scissors-spock.jpg' alt = 'HOW TO' />";
     $('#boardContent').append(div);
+
     socket.on('Jugada',function(jugada){
         console.log("jugadaEnemic12:"+jugada)
         var jugada2=JSON.parse(jugada);
@@ -121,6 +121,9 @@ $(function() {
             $('#pptDestiEnemic').empty();
             $('#pptDestiEnemic').append(imgEnem6);
         }
+    });
+    getNomByUserId(jugadorSel,function(nom){
+        divHeader.append("Estas jugant a <strong>Pedra-Paper-Tisores-Llangardaix-Spock</strong> contra <strong>"+ nom +"</strong>");
     });
 });
 function handle_drop_patient(event, ui) {
@@ -179,6 +182,7 @@ function handle_drop_patient(event, ui) {
 }
 function heGuanyat(meva,seva)
 {
+    var resultat;
     console.log("MEVA:"+meva+" SEVA:"+seva);
     if((meva==='scissors' && seva==='paper')
         || (meva==='spock' && seva==='scissors')
@@ -192,7 +196,7 @@ function heGuanyat(meva,seva)
         || (meva==='spock' && seva==='rock'))
     {
         console.log("HE GUANYAT");
-        return 0;
+        resultat= 0;
     }
     else if((seva==='scissors' && meva==='paper')
         || (seva==='spock' && meva==='scissors')
@@ -206,11 +210,26 @@ function heGuanyat(meva,seva)
         || (seva==='spock' && meva==='rock'))
     {
         console.log("HE PERDUT");
-        return 1;
+        resultat= 1;
     }
     else
     {
         console.log("HE EMPATAT");
-        return 2;
+        resultat= 2;
     }
+    console.log("###MATCHID A GUNYAR="+matchId);
+    if(matchId !== undefined)
+    {
+        var winner;
+        if(resultat===0)
+           winner=playerId1;
+        else if(resultat===1)
+           winner=playerId2;
+        if(winner!=undefined)
+            guardarResultatPartida(winner,matchId,jocSel);
+    }
+    playerId1=undefined;
+    playerId2=undefined;
+    matchId=undefined;
+    return resultat;
 }
