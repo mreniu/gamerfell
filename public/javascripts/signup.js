@@ -1,21 +1,25 @@
 $(document).ready(function()
 {
+    //
+    // CONFIGURACIÓ DEL FORMULARI DE REGISTRE
+    //
+
     // Popover
     $('#registerHere input').hover(
         function(){ $(this).popover('show'); },
         function(){ $(this).popover('hide'); }
     );
 
-    // Validation of inputs
-
+    // Validació de inputs
     $("#registerHere").validate({
+        // Regles de validació
         rules:{
             user:"required",
             email:{required:true,email: true},
             password:{required:true,minlength: 6},
             password_confirm:{required:true,equalTo: "#password"}
         },
-
+        // Missatges de validació
         messages:{
             user:"Entra nom d'usuari",
             email:{
@@ -39,8 +43,10 @@ $(document).ready(function()
             $(element).parents('.control-group').removeClass('error');
             $(element).parents('.control-group').addClass('success');
         },
+        // Handler de event de submit
         submitHandler: function() {
             console.log('Submiting user');
+            // Petició POST de addUser
             $.ajax({
                 type: 'POST',
                 url: '/users',
