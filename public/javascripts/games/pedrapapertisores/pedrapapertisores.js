@@ -51,11 +51,11 @@ $(function() {
     }
 
     divContent.append(divPecesEnemig);
-    var textDestiEnemig= $('<div/>',{class: 'text'}).append("ESPERA");
+    var textDestiEnemig=$('<div/>',{class: 'text'}).append('ESPERA')
     divDestiEnemig.append(textDestiEnemig);
     divContent.append(divDestiEnemig);
-    var textDestiJo= $('<div/>',{class: 'text'}).append("ESCULL!");
-    divDestiJo.append(textDestiJo)
+    var textDestJo=$('<div/>',{class: 'text'}).append('ESCULL!')
+    divDestiJo.append(textDestJo)
     divContent.append(divDestiJo);
     divContent.append(divPecesJo);
 
@@ -106,10 +106,10 @@ $(function() {
            botoResultat.append(botoTornar);
            jugadaEnemic=undefined;
            jugadaMeva=undefined;
-           $(document.body).append(resultat).delay(3000);
-           resultat.show('clip',1000);
+           $(document.body).append(resultat);
+           resultat.delay(2000).show('clip',1000);
            resultat.append(botoResultat);
-           botoResultat.delay(2000).show('clip',1000);
+           botoResultat.delay(4000).show('clip',1000);
        }else
        {
            jugadaEnemic=jugada1.jugada;
@@ -165,10 +165,10 @@ function handle_drop_patient(event, ui) {
         botoResultat.append(botoTornar);
         jugadaEnemic=undefined;
         jugadaMeva=undefined;
-        $(document.body).append(resultat).delay(3000);
-        resultat.show('clip',1000);
+        $(document.body).append(resultat);
+        resultat.delay(2000).show('clip',1000);
         resultat.append(botoResultat);
-        botoResultat.delay(2000).show('clip',1000);
+        botoResultat.delay(4000).show('clip',1000);
     }
 }
 function heGuanyat(meva,seva)
