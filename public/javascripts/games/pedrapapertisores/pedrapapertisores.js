@@ -1,25 +1,23 @@
-/**
- * Created with JetBrains WebStorm.
- * User: Shilko
- * Date: 16/05/13
- * Time: 19:58
- * To change this template use File | Settings | File Templates.
+/*
+   AQUESTA CLASSE INCLOU TOT EL CODI PER QUE S'EXECUTI EL JOC DEL PEDRA PAPER TISORES LLANGARDAIX SPOCK
  */
 var jugadaMeva;
 var jugadaEnemic;
 $(function() {
     jugadaMeva=undefined;
     jugadaEnemic=undefined;
+    //ELIMINEM TOTS ELS BINDS QUE S'HAGIN POGUT CREAR EN EXECUCIONS ANTERIORS
     $(".ppt").unbind();
+    //AFEGIM EL CSS
     $("<link/>", {
         rel: "stylesheet",
         type: "text/css",
         href: "/javascripts/games/pedrapapertisores/pedrapapertisores.css"
     }).appendTo("head");
+    //GENERACIO DEL PANELL
     $('#boardContent').empty();
     var div=$('<div/>',{id:'pedrapapertisoresPanel', class:'ppt'});
     var divHeader=$('<div/>',{id:'pptHeader',class:'gameHeader ppt'});
-    divHeader.append("Estas jugant a <strong>Pedra-Paper-Tisores-Llangardaix-Spock</strong> contra <strong> jugadorSel </strong>");
     var divContent=$('<div/>',{id:'pptContent',class:'gameContent ppt'});
     var divPecesEnemig=$('<div/>',{id:'pptPecesEnemic',class:'pptPeces ppt'});
     var divDestiEnemig=$('<div/>',{id:'pptDestiEnemic',class:'pptDesti ppt'});
@@ -35,6 +33,7 @@ $(function() {
     var arrayImgs= ["lizard", "paper", "rock", "scissors", "spock"];
     for(i=0;i<5;i++)
     {
+        //ES POSICIONEN LES FITXES ALEATORIAMENT
         var rand=Math.floor(Math.random() * arrayImgs.length);
         var text=arrayImgs[rand];
 
@@ -67,6 +66,9 @@ $(function() {
     div.append(divContent);
     var imgHelp="<img class='imgJoc ppt' src = '/javascripts/games/pedrapapertisores/how-to-play-rock-paper-scissors-spock.jpg' alt = 'HOW TO' />";
     $('#boardContent').append(div);
+
+    //QUAN EL CLIENT REB UNA JUGADA PER SOCKET, SI JA HA FET LA SEVA MOSTRA LA JUGADA I FINALITZA EL JOC
+    //SI ENCARA NO HEM FET LA JUGADA ES GUARDA LA JUGADA DE L ALTRE FINS QUE LA FEM i MOSTRA UNA FITXA AMB UN INTERROGANT
     socket.on('Jugada',function(jugada){
         console.log("jugadaEnemic12:"+jugada)
         var jugada2=JSON.parse(jugada);
@@ -95,6 +97,7 @@ $(function() {
                 $('#boardContent').empty();
                 socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
             });
+            //AVALUEM QUI HA GUANYAT I HO MOSTREM TAMBE GUARDEM EL RESULTAT A LA DB
             var result=heGuanyat(jugadaMeva,jugadaEnemic);
             if(result===0)
             {
@@ -122,7 +125,14 @@ $(function() {
             $('#pptDestiEnemic').append(imgEnem6);
         }
     });
+    //OBTENIM EL NOM DEL CONTRINCANT
+    getNomByUserId(jugadorSel,function(nom){
+        divHeader.append("Estas jugant a <strong>Pedra-Paper-Tisores-Llangardaix-Spock</strong> contra <strong>"+ nom +"</strong>");
+    });
 });
+
+//QUAN L USUARI ARRASTRA UNA FITXA FINS A LA ZONA S?ENVIA PER SOCKET
+//LA JUGADA, SI JA HEM REBUT LA JUGADA DEL CONTRINCANT FINALITZEM EL JOC
 function handle_drop_patient(event, ui) {
     if(jugadaMeva===undefined)
     {
@@ -154,6 +164,7 @@ function handle_drop_patient(event, ui) {
                 $('#boardContent').empty();
                 socket.emit('peticioJugar','{"myId":"'+$.cookie('id_user')+'","hisId":"'+jugadorSel+'","jocId":"'+jocSel+'"}');
             });
+            //CALCULAR QUI HA GUANYAT I GUARDEM LES DADES A LA DB
             var result=heGuanyat(jugadaMeva,jugadaEnemic);
             if(result===0)
             {
@@ -177,8 +188,11 @@ function handle_drop_patient(event, ui) {
         }
     }
 }
+
+//METODE QUE CALCULA QUI HA GUANYAT I HO GUARDA A LA DB
 function heGuanyat(meva,seva)
 {
+    var resultat;
     console.log("MEVA:"+meva+" SEVA:"+seva);
     if((meva==='scissors' && seva==='paper')
         || (meva==='spock' && seva==='scissors')
@@ -192,7 +206,7 @@ function heGuanyat(meva,seva)
         || (meva==='spock' && seva==='rock'))
     {
         console.log("HE GUANYAT");
-        return 0;
+        resultat= 0;
     }
     else if((seva==='scissors' && meva==='paper')
         || (seva==='spock' && meva==='scissors')
@@ -206,11 +220,26 @@ function heGuanyat(meva,seva)
         || (seva==='spock' && meva==='rock'))
     {
         console.log("HE PERDUT");
-        return 1;
+        resultat= 1;
     }
     else
     {
         console.log("HE EMPATAT");
-        return 2;
+        resultat= 2;
     }
+    console.log("###MATCHID A GUNYAR="+matchId);
+    if(matchId !== undefined)
+    {
+        var winner;
+        if(resultat===0)
+           winner=playerId1;
+        else if(resultat===1)
+           winner=playerId2;
+        if(winner!=undefined)
+            guardarResultatPartida(winner,matchId,jocSel);
+    }
+    playerId1=undefined;
+    playerId2=undefined;
+    matchId=undefined;
+    return resultat;
 }

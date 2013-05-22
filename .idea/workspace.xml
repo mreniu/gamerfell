@@ -2,9 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44184e00-0594-4cbd-9360-ba98a5a2c929" name="Default" comment="">
+<<<<<<< HEAD
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/game.js" afterPath="$PROJECT_DIR$/routes/game.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/user.js" afterPath="$PROJECT_DIR$/routes/user.js" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css" afterPath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js" afterPath="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
     </list>
     <ignored path="gamerfell.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,21 +39,33 @@
       <file leaf-file-name="application.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/javascripts/application.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state line="177" column="40" selection-start="7809" selection-end="7809" vertical-scroll-proportion="0.0">
+=======
+            <state line="128" column="10" selection-start="5939" selection-end="5939" vertical-scroll-proportion="0.0">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="user.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/user.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="220" column="30" selection-start="6744" selection-end="6744" vertical-scroll-proportion="0.0">
+=======
+      <file leaf-file-name="style.css" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="421" column="41" selection-start="9352" selection-end="9356" vertical-scroll-proportion="-5.52">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="game.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/game.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -56,14 +73,28 @@
               <folding>
                 <marker date="1369242702324" expanded="true" signature="1198:1216" placeholder="..." />
               </folding>
+=======
+      <file leaf-file-name="pedrapapertisores.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="1" selection-start="715" selection-end="715" vertical-scroll-proportion="0.76765376">
+              <folding />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="friendship.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/friendship.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="82" column="0" selection-start="3397" selection-end="3397" vertical-scroll-proportion="0.0">
+=======
+      <file leaf-file-name="pedrapapertisores.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="58" column="34" selection-start="2353" selection-end="2353" vertical-scroll-proportion="-8.72">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
               <folding />
             </state>
           </provider>
@@ -89,18 +120,32 @@
         <option value="$PROJECT_DIR$/../gamerfell-master2/public/javascripts/application.js" />
         <option value="$PROJECT_DIR$/nodecellar/server.js" />
         <option value="$PROJECT_DIR$/public/javascripts/jquery.cookie.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/signup.js" />
         <option value="$PROJECT_DIR$/views/signup.ejs" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/node_modules/express/lib/application.js" />
         <option value="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css" />
         <option value="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
         <option value="$PROJECT_DIR$/app.js" />
+=======
+        <option value="$PROJECT_DIR$/routes/game.js" />
+        <option value="$PROJECT_DIR$/routes/user.js" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
         <option value="$PROJECT_DIR$/routes/friendship.js" />
-        <option value="$PROJECT_DIR$/public/javascripts/application.js" />
+        <option value="$PROJECT_DIR$/node_modules/express/lib/application.js" />
         <option value="$PROJECT_DIR$/views/index.ejs" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/public/javascripts/signup.js" />
         <option value="$PROJECT_DIR$/routes/user.js" />
         <option value="$PROJECT_DIR$/routes/game.js" />
+=======
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/application.js" />
+        <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
+        <option value="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js" />
+        <option value="$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
       </list>
     </option>
   </component>
@@ -246,6 +291,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gamerfell" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gamerfell" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="javascripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="games" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pedrapapertisores" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -348,8 +419,13 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279483" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32792208" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24980111" sideWeight="0.21753247" order="1" side_tool="true" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2036595" sideWeight="0.6899351" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.22564936" sideWeight="0.49960223" order="3" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2036595" sideWeight="0.7532467" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24675325" sideWeight="0.49960223" order="3" side_tool="false" content_ui="tabs" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25482625" sideWeight="0.49482897" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31006494" sideWeight="0.49085122" order="2" side_tool="false" content_ui="tabs" />
@@ -420,33 +496,65 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/node_modules/express/lib/application.js">
+=======
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.3462733" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/images/faceXavi.jpg">
+    <entry file="file://$PROJECT_DIR$/public/images/glyphicons-halflings.png">
       <provider selected="true" editor-type-id="images">
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js">
+    <entry file="file://$PROJECT_DIR$/routes/user.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="38" selection-start="509" selection-end="509" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/friendship.js">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="89" column="2" selection-start="3509" selection-end="3509" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/node_modules/socket.io/lib/namespace.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="313" column="0" selection-start="6078" selection-end="6078" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/node_modules/socket.io/lib/manager.js">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state line="65" column="26" selection-start="2516" selection-end="2516" vertical-scroll-proportion="0.3529412" />
+=======
+        <state line="123" column="0" selection-start="2781" selection-end="2781" vertical-scroll-proportion="0.0" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css">
+    <entry file="file://$PROJECT_DIR$/public/javascripts/additional-methods.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state line="41" column="1" selection-start="715" selection-end="715" vertical-scroll-proportion="0.028764805" />
+=======
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
+    <entry file="file://$PROJECT_DIR$/node_modules/express/lib/application.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state line="298" column="21" selection-start="6175" selection-end="6175" vertical-scroll-proportion="11.207965" />
+=======
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.3462733" />
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
+    <entry file="file://$PROJECT_DIR$/routes/game.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state line="72" column="23" selection-start="2016" selection-end="2016" vertical-scroll-proportion="-4.528761" />
       </provider>
     </entry>
@@ -466,12 +574,36 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
+=======
+        <state line="59" column="2" selection-start="1808" selection-end="1808" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/images/faceXavi.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="92" column="28" selection-start="3386" selection-end="3386" vertical-scroll-proportion="-4.4615383" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="41" selection-start="2541" selection-end="2541" vertical-scroll-proportion="0.34851936">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/application.js">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="128" column="10" selection-start="5939" selection-end="5939" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/views/signup.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-4.392252" />
@@ -480,20 +612,37 @@
     <entry file="file://$PROJECT_DIR$/public/javascripts/application.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="177" column="40" selection-start="7809" selection-end="7809" vertical-scroll-proportion="0.0">
+=======
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="421" column="41" selection-start="9352" selection-end="9356" vertical-scroll-proportion="-5.52">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/routes/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="220" column="30" selection-start="6744" selection-end="6744" vertical-scroll-proportion="0.0">
+=======
+    <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="58" column="34" selection-start="2353" selection-end="2353" vertical-scroll-proportion="-8.72">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
           <folding />
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/routes/friendship.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="82" column="0" selection-start="3397" selection-end="3397" vertical-scroll-proportion="0.0">
+=======
+    <entry file="file://$PROJECT_DIR$/public/javascripts/games/pedrapapertisores/pedrapapertisores.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="1" selection-start="715" selection-end="715" vertical-scroll-proportion="0.76765376">
+>>>>>>> 38c7da748c3f413c3c8b658bbb25d8d9440e12e1
           <folding />
         </state>
       </provider>
