@@ -198,34 +198,34 @@ exports.populateDB = function() {
     var users = [
         {
             USERID: "user1",
-            user: "LamarLamiouen",
-            name: "Marc",
-            surnames: "Reniu Sanchez",
-            email: "reniu@marc.com",
+            user: "JohnSmith",
+            name: "John",
+            surnames: "Smith",
+            email: "j.h@yahoo.com",
             password: "asdasdasd"
         },
         {
             USERID: "user2",
-            user: "ElRubius",
-            name: "Soup",
-            surnames: "Of Kitchen",
-            email: "el@rubius.com",
+            user: "Marilu",
+            name: "Maria",
+            surnames: "Lucrecia",
+            email: "lucmar@gmail.com",
             password: "asdasdasd"
         },
         {
             USERID: "user3",
-            user: "asd",
-            name: "Soup",
-            surnames: "Of Kitchen",
-            email: "asd@asd.com",
+            user: "xavier",
+            name: "Xavier",
+            surnames: "Sendra Granell",
+            email: "sendra.granell@hotmail.com",
             password: "asdasd"
         },
         {
             USERID: "user4",
-            user: "qwe",
-            name: "Soup",
-            surnames: "Of Kitchen",
-            email: "qwe@qwe.com",
+            user: "marc",
+            name: "Marc",
+            surnames: "Reniu Sanchez",
+            email: "reniu.sanchez@gmail.com",
             password: "qweqwe"
         }];
 

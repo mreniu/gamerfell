@@ -45,7 +45,7 @@ exports.populateDB = function() {
         {
             GAMEID: "game1",
             NAME: "Pedra-Paper-Tisores",
-            DESCRIPTION: "Pedra, paper, tisores de tota la vida...",
+            DESCRIPTION: "Pedra, paper, tisores, langardaix, Spock <img style='max-height: 200px;' src='/javascripts/games/pedrapapertisores/how-to-play-rock-paper-scissors-spock.jpg' />",
             NPlayers: "2",
             GAMEPATH: "games/pedrapapertisores/pedrapapertisores.js"
         },{
