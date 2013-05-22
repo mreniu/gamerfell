@@ -126,6 +126,24 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             sockets.push(socket);
             //AVISEM AL CLIENT QUE EL PROCES DE CONNEXIO S'HA Finalitzat
             socket.emit('connected');
+            getFriends(idUser,function(items)
+            {
+                console.log("AVISAR AMICS CONN"+JSON.stringify(items));
+                   for(i=0;i<items.length;i++)
+                   {
+                       if(items[i].USERID1!=idUser)
+                       {
+                           var index=usersConn.indexOf(items[i].USERID1);
+                           if(index>=0)
+                            sockets[index].emit("friendConnect",items[i].USERID1);
+                       }else if(items[i].USERID2!=idUser)
+                       {
+                           var index=usersConn.indexOf(items[i].USERID2);
+                           if(index>=0)
+                               sockets[index].emit("friendConnect",items[i].USERID2);
+                       }
+                   }
+            });
         });
         //QUAN REBEM UNA DESCONNEXIO ELIMINEM L'USUARI DE LA LLISTA
         socket.on('disconnect', function () {
@@ -133,8 +151,27 @@ var server = http.createServer(app).listen(app.get('port'), function(){
             var index=sockets.indexOf(socket);
             if(index>=0)
             {
+                var userid=usersConn[index];
                 sockets.splice(index, 1);
                 usersConn.splice(index, 1);
+                getFriends(userid,function(items)
+                {
+                    console.log("AVISAR AMICS DISCONN"+JSON.stringify(items));
+                    for(i=0;i<items.length;i++)
+                    {
+                        if(items[i].USERID1!=userid)
+                        {
+                            var index=usersConn.indexOf(items[i].USERID1);
+                            if(index>=0)
+                                sockets[index].emit("friendDisconnect",items[i].USERID1);
+                        }else if(items[i].USERID2!=userid)
+                        {
+                            var index=usersConn.indexOf(items[i].USERID2);
+                            if(index>=0)
+                                sockets[index].emit("friendDisconnect",items[i].USERID2);
+                        }
+                    }
+                });
             }
         });
         //QUAN REBEM UNA PETICIO DE JUGAR LA REENVIEM A EL DESTINATARI SI SON AMICS
@@ -230,6 +267,15 @@ function existFriendship(idUser1,idUser2,callback)
         collection.find({$or:[{USERID:idUser1,USERID2:idUser2},{USERID:idUser2,USERID2:idUser1}]}).count(function(err, count) {
             console.log('existeix:count?:'+count);
             callback(count);
+        });
+    });
+}
+
+function getFriends(idUser1,callback)
+{
+    db.collection('friendships', function(err, collection) {
+        collection.find({$or:[{USERID:idUser1},{USERID2:idUser1}]}).toArray(function(err, items) {
+            callback(items);
         });
     });
 }

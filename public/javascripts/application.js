@@ -250,7 +250,15 @@ function connect(callback) {
         $.getScript( "/javascripts/games/pedrapapertisores/pedrapapertisores.js", function(script, textStatus, jqXHR)
         {});
     });
-
+     socket.on('friendConnect',function(data){
+         console.log("AMIC CONNECTAT:"+data);
+        $('#'+data).removeClass('no-connected');
+        $('#'+data).addClass('connected');
+     });
+    socket.on('friendDisconnect',function(data){
+        $('#'+data).removeClass('connected');
+        $('#'+data).addClass('no-connected');
+    });
     //#6 Si nos desconectamos, muestra el log y cambia el mensaje.
     socket.on('disconnect', function () {
         console.log('Desconectado!');
