@@ -383,14 +383,30 @@ div.panel .btn{
     #friendsList .friend.ui-draggable-dragging .chat-button { display: none }
 
     #friendsList .chat {
+        position:relative;
         background: #cdf;
         width: 100%;
         height: 200px;
         box-shadow: 1px 1px 5px #888;
-        overflow: auto;
+
         display: none;
     }
+    .textdiv{
+        max-width: 200px;
+        max-height: 170px;
+        overflow: auto;
+    }
+    .textlimitdiv{
 
+    }
+    .input_chat{
+        position:absolute;
+        bottom: 1px;
+        width:185px;
+    }
+    .textmeu{
+        color:green;
+    }
 
     #friendsPanel #addFriendPanel {
         display: none;

@@ -11,7 +11,7 @@ exports.list = function(req, res){
  * GET Game by ID
  */
 exports.findById = function(req, res) {
-    var GAMEID = req.query.id;
+    var GAMEID = req.body.gameid;
     console.log('Adding wine: ' + GAMEID);
     db.collection('games', function(err, collection) {
         collection.findOne({'GAMEID':GAMEID}, function(err, item) {

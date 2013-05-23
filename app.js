@@ -62,7 +62,6 @@ app.get('/', routes.index);
 app.get('/signup', routes.signup);
 
 // API REST of GAMES
-app.get('/games/:id', game.findById);
 app.post('/games', game.findById);
 app.get('/games', game.findAll);
 
@@ -131,16 +130,17 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 console.log("AVISAR AMICS CONN"+JSON.stringify(items));
                    for(i=0;i<items.length;i++)
                    {
-                       if(items[i].USERID1!=idUser)
+                       if(items[i].USERID!=idUser)
                        {
-                           var index=usersConn.indexOf(items[i].USERID1);
+                           var index=usersConn.indexOf(items[i].USERID);
+                           console.log("AVISAR "+items[i].USERID);
                            if(index>=0)
-                            sockets[index].emit("friendConnect",items[i].USERID1);
+                            sockets[index].emit("friendConnect",idUser);
                        }else if(items[i].USERID2!=idUser)
                        {
                            var index=usersConn.indexOf(items[i].USERID2);
                            if(index>=0)
-                               sockets[index].emit("friendConnect",items[i].USERID2);
+                               sockets[index].emit("friendConnect",idUser);
                        }
                    }
             });
@@ -159,16 +159,16 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                     console.log("AVISAR AMICS DISCONN"+JSON.stringify(items));
                     for(i=0;i<items.length;i++)
                     {
-                        if(items[i].USERID1!=userid)
+                        if(items[i].USERID!=userid)
                         {
-                            var index=usersConn.indexOf(items[i].USERID1);
+                            var index=usersConn.indexOf(items[i].USERID);
                             if(index>=0)
-                                sockets[index].emit("friendDisconnect",items[i].USERID1);
+                                sockets[index].emit("friendDisconnect",userid);
                         }else if(items[i].USERID2!=userid)
                         {
                             var index=usersConn.indexOf(items[i].USERID2);
                             if(index>=0)
-                                sockets[index].emit("friendDisconnect",items[i].USERID2);
+                                sockets[index].emit("friendDisconnect",userid);
                         }
                     }
                 });
@@ -203,6 +203,38 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                 {
                     console.log('ERROR: no es pot reevnar Peticio:'+peticioObj.hisId);
                     socket.emit('ERROR','No es pot enviar peticio de jugar a '+peticioObj.hisId);
+                }
+            }) ;
+
+        });
+        socket.on('chat',function(chat){
+            console.log('Peticio rebuda:'+chat);
+            var chatObj=JSON.parse(chat);
+            //Comprovar que son amics
+            existFriendship(chatObj.USERID1,chatObj.USERID2,function(result){
+                if(result>0)
+                {
+                    //BUSQUEM EL SOCKET QUE CORRESPON AL USUARI
+                    var index=usersConn.indexOf(chatObj.USERID2);
+                    if(index>=0)
+                    {
+                        socket2=sockets[index];
+                        if(socket2!=undefined)
+                        {
+                            socket2.emit('chat',chat);
+                            console.log('Chat reenviada a:'+chatObj.USERID2);
+                        } else
+                        {
+                            console.log("Socket undefined:"+chatObj.USERID2);
+                        }
+                    }else
+                    {
+                        console.log("Usuari no connectat:"+chatObj.USERID2);
+                    }
+                }else
+                {
+                    console.log('ERROR: no es pot reevnar Peticio:'+chatObj.USERID2);
+                    socket.emit('ERROR','No es pot enviar peticio de jugar a '+chatObj.USERID2);
                 }
             }) ;
 
@@ -255,6 +287,27 @@ var server = http.createServer(app).listen(app.get('port'), function(){
                     socket.emit('ERROR','No es pot enviar jugada a '+jugadaObj.hisId);
                 }
             }) ;
+        });
+        socket.on("getConnectedFriends",function(userid){
+            var array=[];
+            getFriends(userid,function(items){
+                console.log("AMICS OBTINGUTS:"+items) ;
+                for(i=0;i<items.length;i++)
+                {
+                    if(items[i].USERID!=userid)
+                    {
+                        var index=usersConn.indexOf(items[i].USERID);
+                        if(index>=0)
+                            array.push({userid:items[i].USERID});
+                    }else if(items[i].USERID2!=userid)
+                    {
+                        var index=usersConn.indexOf(items[i].USERID2);
+                        if(index>=0)
+                            array.push({userid:items[i].USERID2});
+                    }
+                }
+                socket.emit('ConnectedFiends',JSON.stringify(array));
+            });
         });
     });
     //############################

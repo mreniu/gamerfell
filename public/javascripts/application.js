@@ -14,7 +14,7 @@ $(function() {
         for(i=0;i<peticionsCookie.length;i++)
         {
             var peticioObj=peticionsCookie[i];
-            var nomJoc='';
+            var nomJoc=''; peticioObj.jocId
             $.ajax({
                 type: 'POST',
                 url: '/games',
@@ -100,10 +100,9 @@ function handle_drop_patient(event, ui) {
         //Petició de l'objecte Game
         jocSel=($(ui.draggable).attr("id"));
         $.ajax({
-            type: 'GET',
-            url: '/games/:id',
-            data: {'id': jocSel},
-            dataType: 'json'
+                type: 'POST',
+                url: '/games',
+                data: 'gameid='+jocSel
         }).done(function(data){
             // Creació i addhesió del joc al DOM del tauler
             var divJoc=$('<div/>',{id:'gameContent'}).append( "<div class='image'><img class='imgPerfil' src = '../images/faceGame.jpg' alt = 'Picture of a happy monkey' /></div><div class='text'>"+data.NAME+"</div><div class='data'><strong>Descripció: </strong>"+data.DESCRIPTION+"<br/><strong>Nº jugadors: </strong>"+data.NPlayers+"</div>");
@@ -155,12 +154,20 @@ function connect(callback) {
         console.log('Conectado!');
         if(callback!=undefined)
             callback($.cookie('id_user'),jugadorSel,jocSel);
+        socket.emit('getConnectedFriends',$.cookie('id_user'));
     });
     //MISSATGE REBUT DEL SERVIDOR SERIA PER FER EL XAT
     socket.on('missatgeRem', function(missatge){
         console.log('Missatge: '+missatge);
     });
-
+    socket.on('ConnectedFiends',function(array){
+        var connectats=JSON.parse(array);
+        for(i=0;i<connectats.length;i++)
+        {
+            $('#'+connectats[i].userid).removeClass('no-connected');
+            $('#'+connectats[i].userid).addClass('connected');
+        }
+    });
     //REBEM PETICIO DE JUGAR, s'afegeix a la llista de peticions  i a la cookie
     socket.on('peticioJugar',function(peticio){
         console.log('Peticio rebuda: '+peticio);
@@ -258,6 +265,10 @@ function connect(callback) {
     socket.on('friendDisconnect',function(data){
         $('#'+data).removeClass('connected');
         $('#'+data).addClass('no-connected');
+    });
+    socket.on('chat',function(data){
+        var miss=JSON.parse(data);
+        $('#text_'+miss.USERID1).append("<div class='textseu'>"+miss.MISS+"</div>");
     });
     //#6 Si nos desconectamos, muestra el log y cambia el mensaje.
     socket.on('disconnect', function () {
@@ -373,9 +384,23 @@ function getFriendList(){
 // Afegim un usuari al llistat d'amics segons un objecte USER
 function addFriendToList(friend) {
     // Creem estructura DOM
-    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+friend.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat('"+friend.USERID+"')'><img class='ic-chat'></a></div>"
-    var div=$('<div/>',{id: friend.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string )
-    var chat_div=$('<div/>',{id: 'chat_'+friend.USERID, class:'chat'})
+    var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+friend.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat('"+friend.USERID+"')'><img class='ic-chat'></a></div>" ;
+    var div=$('<div/>',{id: friend.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string ) ;
+    var chat_div=$('<div/>',{id: 'chat_'+friend.USERID, class:'chat'}) ;
+    chat_div.append("<div id='text_"+friend.USERID+"' class='textdiv'> </div>") ;
+    var inputChat=$('<input/>',{type:'text', id:'input_'+friend.USERID, class:'input_chat'});
+    inputChat.keypress(function(e) {
+        if(e.keyCode == 13) {
+            var text=$(this).val();
+            if(text!= undefined && text!='')
+            {
+                socket.emit("chat",JSON.stringify({USERID1:$.cookie('id_user'),USERID2:friend.USERID,MISS:text}));
+                $('#text_'+friend.USERID).append("<div class='textmeu'>"+text+"</div>");
+                $(this).val("");
+            }
+        }
+    });
+    chat_div.append(inputChat);
     div.draggable(
         {
             revert:'invalid',
@@ -405,9 +430,23 @@ function addFriendToListWithSearch(friend){
         dataType: 'json'
     }).done(function(data){
             // Creem estructura DOM
-            var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+data.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat(\""+data.USERID+"\")'><img class='ic-chat'></a></div>"
-            var div=$('<div/>',{id: data.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string )
-            var chat_div=$('<div/>',{id: 'chat_'+data.USERID, class:'chat'})
+            var string= "<img class='imgPerfil' src = '../images/faceXavi.jpg' alt = 'Picture of a happy monkey' /><div class='connected-icon'></div><div class='text'><div class='title'>"+data.user+"</div><div class='desc'>desc desc</div></div><div class='chat-button'><a onclick='showChat(\""+data.USERID+"\")'><img class='ic-chat'></a></div>";
+            var div=$('<div/>',{id: data.USERID,class:'friend ui-widget-content draggable no-connected message'}).append( string );
+            var chat_div=$('<div/>',{id: 'chat_'+data.USERID, class:'chat'});
+            chat_div.append("<div class='textlimitdiv'><div id='text_"+data.USERID+"' class='textdiv'> </div></div>") ;
+            var inputChat=$('<input/>',{type:'text', id:'input_'+data.USERID, class:'input_chat'});
+            inputChat.keypress(function(e) {
+                if(e.keyCode == 13) {
+                    var text=$(this).val();
+                    if(text!= undefined && text!='')
+                    {
+                        socket.emit("chat",JSON.stringify({USERID1:$.cookie('id_user'),USERID2:data.USERID,MISS:text}));
+                        $('#text_'+data.USERID).append("<div class='textmeu'>"+text+"</div>");
+                        $(this).val("");
+                    }
+                }
+            });
+            chat_div.append(inputChat);
             div.draggable(
                 {
                     revert:'invalid',
@@ -487,7 +526,7 @@ function guardarResultatPartida(playerId,matchid,gameId)
     $.ajax({
         type: 'PUT',
         url: '/matchs',
-        data: 'MATCHID='+matchid+'GAMEID='+gameid+'&STATE=1&WINNER='+playerId
+        data: 'MATCHID='+matchid+'GAMEID='+gameId+'&STATE=1&WINNER='+playerId
     });
 }
 //GUARDA UNA PARTIDA A LA BD AMB ELS JUGADORS
